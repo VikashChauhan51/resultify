@@ -1,4 +1,4 @@
-﻿namespace Resultify;
+﻿namespace ResultifyCore;
 
 public static class OptionExtensions
 {

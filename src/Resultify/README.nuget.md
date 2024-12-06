@@ -1,20 +1,20 @@
 ﻿
-# Resultify
+# ResultifyCore
 
-Resultify is a .NET library providing `Result` and `Option` patterns to simplify error handling and optional values. It includes extension methods for fluent API support and enhanced readability.
+ResultifyCore is a .NET library providing `Result` and `Option` patterns to simplify error handling and optional values. It includes extension methods for fluent API support and enhanced readability.
 
 ## Installation
 
-You can install the Resultify package via NuGet:
+You can install the ResultifyCore package via NuGet:
 
 ```shell
-dotnet add package Resultify
+dotnet add package ResultifyCore
 ```
 
 Or you can use the NuGet Package Manager:
 
 ```shell
-Install-Package Resultify
+Install-Package ResultifyCore
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ The `Result` pattern represents the outcome of an operation that can either succ
 #### Creating a Result
 
 ```csharp
-using Resultify;
+using ResultifyCore;
 
 var successResult = Result<int>.Succ(42);
 var failureResult = Result<int>.Fail(new Exception("Something went wrong"));
@@ -70,7 +70,7 @@ The `Option` pattern represents an optional value that may or may not be present
 #### Creating an Option
 
 ```csharp
-using Resultify;
+using ResultifyCore;
 
 var someOption = Option<int>.Some(42);
 var noneOption = Option<int>.None;
@@ -110,7 +110,7 @@ noneOption
 
 ### Extensions
 
-Resultify provides several extension methods to facilitate fluent API and method chaining.
+ResultifyCore provides several extension methods to facilitate fluent API and method chaining.
 
 #### Result Extensions
 

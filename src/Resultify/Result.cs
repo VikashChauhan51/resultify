@@ -1,6 +1,6 @@
-﻿using Resultify.Exceptions;
+﻿using ResultifyCore.Exceptions;
 
-namespace Resultify;
+namespace ResultifyCore;
 
 /// <summary>
 /// Represents the result of an operation that can succeed or fail.

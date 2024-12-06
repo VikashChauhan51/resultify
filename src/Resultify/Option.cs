@@ -1,6 +1,6 @@
-﻿using Resultify.Exceptions;
+﻿using ResultifyCore.Exceptions;
 
-namespace Resultify;
+namespace ResultifyCore;
 
 /// <summary>
 /// Represents an option type that can contain a value or be empty (None).
