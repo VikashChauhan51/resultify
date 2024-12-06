@@ -1,9 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<VersionPrefix>1.0.0</VersionPrefix>
+		<PackageId>Resultify</PackageId>
+		<Title>Resultify</Title>
+		<Authors>Vikash Chauhan</Authors>
+		<Summary>Comprehensive library for handling Result and Option patterns in .NET applications.</Summary>
+		<Copyright>Copyright (c) Vikash Chauhan. All rights reserved.</Copyright>
+		<Description>
+			Resultify is a comprehensive library designed to handle Result and Option patterns in .NET applications.
+			It includes:
+			- Result pattern for handling success and failure outcomes.
+			- Option pattern for handling optional values.
+			- Extension methods for fluent API support.
+			- Method chaining for enhanced readability.
+			- Comprehensive error handling using custom exceptions.
 
+			The library simplifies handling different outcomes, enhancing readability and maintainability of your codebase.
+		</Description>
+		<PackageTags>C#, Result, Option, Result Pattern, Option Pattern, Error Handling, Method Chaining</PackageTags>
+		<PackageProjectUrl>https://github.com/VikashChauhan51/resultify</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/VikashChauhan51/resultify</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<AssemblyOriginatorKeyFile>..\Resultify.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>true</SignAssembly>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageReadmeFile>README.nuget.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Update="..\Resultify.snk">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Update="README.nuget.md">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-
+﻿
 # Resultify
 
 Resultify is a .NET library providing `Result` and `Option` patterns to simplify error handling and optional values. It includes extension methods for fluent API support and enhanced readability.
