@@ -16,38 +16,6 @@ public static class ResultExtensions
     }
 
     /// <summary>
-    /// Executes an action if the result is successful.
-    /// </summary>
-    /// <typeparam name="T">The type of the value.</typeparam>
-    /// <param name="result">The result to apply the action on.</param>
-    /// <param name="onSuccess">The action to execute if the result is successful.</param>
-    /// <returns>The original result to allow method chaining.</returns>
-    public static Result<T> OnSuccess<T>(this Result<T> result, Action<T> onSuccess)
-    {
-        if (result.IsSuccess)
-        {
-            onSuccess(result.Value!);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// Executes an action if the result is failed.
-    /// </summary>
-    /// <typeparam name="T">The type of the value.</typeparam>
-    /// <param name="result">The result to apply the action on.</param>
-    /// <param name="onFailure">The action to execute if the result is failed.</param>
-    /// <returns>The original result to allow method chaining.</returns>
-    public static Result<T> OnError<T>(this Result<T> result, Action<Exception> onFailure)
-    {
-        if (!result.IsSuccess)
-        {
-            onFailure(result.Exception!);
-        }
-        return result;
-    }
-
-    /// <summary>
     /// Transforms the value inside a successful result.
     /// </summary>
     /// <typeparam name="T">The type of the original value.</typeparam>
