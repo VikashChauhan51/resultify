@@ -54,14 +54,14 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// </summary>
     /// <param name="value">The value of the successful result.</param>
     /// <returns>A successful <see cref="Result{T}"/>.</returns>
-    public static Result<T> Succ(T value) => new Result<T>(value);
+    public static Result<T> Success(T value) => new Result<T>(value);
 
     /// <summary>
     /// Creates a failed result.
     /// </summary>
     /// <param name="error">The exception of the failed result.</param>
     /// <returns>A failed <see cref="Result{T}"/>.</returns>
-    public static Result<T> Fail(Exception error) => new Result<T>(error);
+    public static Result<T> Failure(Exception error) => new Result<T>(error);
 
     /// <summary>
     /// Compares this instance with another <see cref="Result{T}"/> and returns an integer that indicates whether this instance precedes, follows, or occurs in the same position in the sort order as the other <see cref="Result{T}"/>.
@@ -265,4 +265,141 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         return left.CompareTo(right) >= 0;
     }
+}
+
+
+
+/// <summary>
+/// Represents the result of an operation that can succeed or fail.
+/// </summary>
+public readonly struct Result : IEquatable<Result>
+{
+    private readonly Exception? exception;
+
+    /// <summary>
+    /// Gets a value indicating whether the result is successful.
+    /// </summary>
+    public bool IsSuccess => this.exception is null;
+
+    /// <summary>
+    /// Gets the exception of the result if it is a failure.
+    /// </summary>
+    public Exception? Exception => this.exception;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result"/> struct with a successful state.
+    /// </summary>
+    private Result(bool isSuccess)
+    {
+        this.exception = null;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Result"/> struct with a failure exception.
+    /// </summary>
+    /// <param name="error">The exception of the failed result.</param>
+    private Result(Exception error)
+    {
+        this.exception = error;
+    }
+
+    /// <summary>
+    /// Creates a successful result.
+    /// </summary>
+    /// <returns>A successful <see cref="Result"/>.</returns>
+    public static Result Success() => new Result(true);
+
+    /// <summary>
+    /// Creates a failed result.
+    /// </summary>
+    /// <param name="error">The exception of the failed result.</param>
+    /// <returns>A failed <see cref="Result"/>.</returns>
+    public static Result Failure(Exception error) => new Result(error);
+
+    /// <summary>
+    /// Executes one of the specified actions based on whether the result is successful or failed.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute if the result is successful.</param>
+    /// <param name="onFailure">The action to execute if the result is failed.</param>
+    public void Match(Action onSuccess, Action<Exception> onFailure)
+    {
+        if (IsSuccess)
+        {
+            onSuccess();
+        }
+        else
+        {
+            onFailure(this.exception!);
+        }
+    }
+
+    /// <summary>
+    /// Executes the specified action if the result is successful.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute if the result is successful.</param>
+    public void OnSuccess(Action onSuccess)
+    {
+        if (IsSuccess)
+        {
+            onSuccess();
+        }
+    }
+
+    /// <summary>
+    /// Executes the specified action if the result is failed.
+    /// </summary>
+    /// <param name="onFailure">The action to execute if the result is failed.</param>
+    public void OnFailure(Action<Exception> onFailure)
+    {
+        if (!IsSuccess)
+        {
+            onFailure(this.exception!);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether this instance and another specified <see cref="Result"/> are equal.
+    /// </summary>
+    /// <param name="other">The <see cref="Result"/> to compare to this instance.</param>
+    /// <returns><c>true</c> if the two <see cref="Result"/> instances are equal; otherwise, <c>false</c>.</returns>
+    public bool Equals(Result other)
+    {
+        if (IsSuccess && other.IsSuccess)
+        {
+            return true;
+        }
+        if (!IsSuccess && !other.IsSuccess)
+        {
+            return EqualityComparer<Exception>.Default.Equals(this.exception, other.exception);
+        }
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        return obj is Result other && Equals(other);
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this.exception);
+    }
+
+    /// <summary>
+    /// Determines whether two <see cref="Result"/> instances are equal.
+    /// </summary>
+    /// <param name="left">The first <see cref="Result"/> to compare.</param>
+    /// <param name="right">The second <see cref="Result"/> to compare.</param>
+    /// <returns><c>true</c> if the two <see cref="Result"/> instances are equal; otherwise, <c>false</c>.</returns>
+    public static bool operator ==(Result left, Result right) => left.Equals(right);
+
+    /// <summary>
+    /// Determines whether two <see cref="Result"/> instances are not equal.
+    /// </summary>
+    /// <param name="left">The first <see cref="Result"/> to compare.</param>
+    /// <param name="right">The second <see cref="Result"/> to compare.</param>
+    /// <returns><c>true</c> if the two <see cref="Result"/> instances are not equal; otherwise, <c>false</c>.</returns>
+    public static bool operator !=(Result left, Result right) => !left.Equals(right);
 }

@@ -25,7 +25,7 @@ public static class ResultExtensions
     /// <returns>A new result with the transformed value if successful, otherwise the original failure result.</returns>
     public static Result<U> Map<T, U>(this Result<T> result, Func<T, U> map)
     {
-        return result.IsSuccess ? Result<U>.Succ(map(result.Value!)) : Result<U>.Fail(result.Exception!);
+        return result.IsSuccess ? Result<U>.Success(map(result.Value!)) : Result<U>.Failure(result.Exception!);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public static class ResultExtensions
     /// <returns>The result of the next operation if the current result is successful, otherwise the original failure result.</returns>
     public static Result<U> Bind<T, U>(this Result<T> result, Func<T, Result<U>> bind)
     {
-        return result.IsSuccess ? bind(result.Value!) : Result<U>.Fail(result.Exception!);
+        return result.IsSuccess ? bind(result.Value!) : Result<U>.Failure(result.Exception!);
     }
 
     /// <summary>
