@@ -17,7 +17,7 @@ public readonly struct OneOf<T1, T2>
     /// Initializes a new instance of the <see cref="OneOf{T1, T2}"/> struct with a value of type T1.
     /// </summary>
     /// <param name="value">The value of type T1.</param>
-    private OneOf(T1 value)
+    public OneOf(T1 value)
     {
         _value1 = value;
         _value2 = default!;
@@ -28,7 +28,7 @@ public readonly struct OneOf<T1, T2>
     /// Initializes a new instance of the <see cref="OneOf{T1, T2}"/> struct with a value of type T2.
     /// </summary>
     /// <param name="value">The value of type T2.</param>
-    private OneOf(T2 value)
+    public OneOf(T2 value)
     {
         _value1 = default!;
         _value2 = value;
