@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Exceptions;
+﻿namespace ResultifyCore.Result;
 
 /// <summary>
 /// Exception thrown when an attempt is made to unwrap a failed Result.

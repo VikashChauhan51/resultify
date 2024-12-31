@@ -1,19 +1,18 @@
-﻿using ResultifyCore.Exceptions;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ResultifyCore;
+namespace ResultifyCore.Outcome;
 
 public class Outcome : IEqualityComparer<Outcome>
 {
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
-    public IEnumerable<ResultError> Errors { get; } = [];
+    public IEnumerable<OutcomeError> Errors { get; } = [];
 
     public Outcome(bool isSuccess) : this(isSuccess, [])
     {
     }
 
-    public Outcome(IEnumerable<ResultError> errors) : this(false, errors)
+    public Outcome(IEnumerable<OutcomeError> errors) : this(false, errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -21,7 +20,7 @@ public class Outcome : IEqualityComparer<Outcome>
         }
     }
 
-    private Outcome(bool isSuccess, IEnumerable<ResultError> errors)
+    private Outcome(bool isSuccess, IEnumerable<OutcomeError> errors)
     {
         IsSuccess = isSuccess;
         Errors = errors ?? [];
@@ -32,7 +31,7 @@ public class Outcome : IEqualityComparer<Outcome>
         return new Outcome(true, []);
     }
 
-    public static Outcome Failure(params ResultError[] errors)
+    public static Outcome Failure(params OutcomeError[] errors)
     {
         if (errors == null || errors.Length == 0)
         {
@@ -42,7 +41,7 @@ public class Outcome : IEqualityComparer<Outcome>
         return new Outcome(false, errors);
     }
 
-    public static Outcome Failure(IEnumerable<ResultError> errors)
+    public static Outcome Failure(IEnumerable<OutcomeError> errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -52,7 +51,7 @@ public class Outcome : IEqualityComparer<Outcome>
         return new Outcome(false, errors);
     }
 
-    public void Match(Action onSuccess, Action<IEnumerable<ResultError>> onFailure)
+    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
     {
         if (IsSuccess)
         {
@@ -60,7 +59,7 @@ public class Outcome : IEqualityComparer<Outcome>
         }
         else
         {
-            onFailure(this.Errors);
+            onFailure(Errors);
         }
     }
 
@@ -104,13 +103,13 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
     public bool IsSuccess { get; }
     public bool IsFailure => !IsSuccess;
     public T? Value { get; }
-    public IEnumerable<ResultError> Errors { get; } = [];
+    public IEnumerable<OutcomeError> Errors { get; } = [];
 
     public Outcome(T value) : this(true, value, [])
     {
     }
 
-    public Outcome(IEnumerable<ResultError> errors) : this(false, default, errors)
+    public Outcome(IEnumerable<OutcomeError> errors) : this(false, default, errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -118,7 +117,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         }
     }
 
-    private Outcome(bool isSuccess, T value, IEnumerable<ResultError> errors)
+    private Outcome(bool isSuccess, T value, IEnumerable<OutcomeError> errors)
     {
         IsSuccess = isSuccess;
         Value = value;
@@ -135,7 +134,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         return new Outcome<T>(true, value, []);
     }
 
-    public static Outcome<T> Failure(params ResultError[] errors)
+    public static Outcome<T> Failure(params OutcomeError[] errors)
     {
         if (errors == null || errors.Length == 0)
         {
@@ -145,7 +144,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         return new Outcome<T>(false, default, errors);
     }
 
-    public static Outcome<T> Failure(IEnumerable<ResultError> errors)
+    public static Outcome<T> Failure(IEnumerable<OutcomeError> errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -165,7 +164,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         return Value!;
     }
 
-    public void Match(Action onSuccess, Action<IEnumerable<ResultError>> onFailure)
+    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
     {
         if (IsSuccess)
         {
@@ -173,13 +172,13 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         }
         else
         {
-            onFailure(this.Errors);
+            onFailure(Errors);
         }
     }
 
-    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<IEnumerable<ResultError>, TResult> onFailure)
+    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<IEnumerable<OutcomeError>, TResult> onFailure)
     {
-        return IsSuccess ? onSuccess(this.Value!) : onFailure(this.Errors);
+        return IsSuccess ? onSuccess(Value!) : onFailure(Errors);
     }
 
     public bool Equals(Outcome<T>? other)
@@ -206,7 +205,6 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         return hash.ToHashCode();
     }
 
-    // IEqualityComparer implementation
     public bool Equals(Outcome<T>? x, Outcome<T>? y)
     {
         if (x is null || y is null) return false;

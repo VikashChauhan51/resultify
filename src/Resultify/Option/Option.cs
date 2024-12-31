@@ -1,6 +1,4 @@
-﻿using ResultifyCore.Exceptions;
-
-namespace ResultifyCore;
+﻿namespace ResultifyCore.Option;
 
 /// <summary>
 /// Represents an option type that can contain a value or be empty (None).
@@ -20,7 +18,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
     /// <summary>
     /// Gets the value of the option if it is some value.
     /// </summary>
-    public T? Value => this._value;
+    public T? Value => _value;
 
     /// <summary>
     /// Creates an instance of <see cref="Option{T}"/> that contains a value.

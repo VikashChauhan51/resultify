@@ -1,16 +1,16 @@
-﻿namespace ResultifyCore;
-public readonly record struct ResultError : IEquatable<ResultError>
+﻿namespace ResultifyCore.Outcome;
+public readonly record struct OutcomeError : IEquatable<OutcomeError>
 {
     public string Code { get; }
     public string Message { get; }
 
-    public ResultError(string code, string message)
+    public OutcomeError(string code, string message)
     {
         Code = code;
         Message = message;
     }
 
-    public bool Equals(ResultError other)
+    public bool Equals(OutcomeError other)
     {
         return Code == other.Code && Message == other.Message;
     }

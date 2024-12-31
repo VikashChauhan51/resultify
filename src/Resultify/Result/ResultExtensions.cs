@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore;
+﻿namespace ResultifyCore.Result;
 
 public static class ResultExtensions
 {

@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore;
+﻿namespace ResultifyCore.Option;
 
 public static class OptionExtensions
 {

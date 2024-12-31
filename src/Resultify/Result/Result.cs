@@ -1,6 +1,4 @@
-﻿using ResultifyCore.Exceptions;
-
-namespace ResultifyCore;
+﻿namespace ResultifyCore.Result;
 
 /// <summary>
 /// Represents the result of an operation that can succeed or fail.
@@ -15,17 +13,17 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <summary>
     /// Gets a value indicating whether the result is successful.
     /// </summary>
-    public bool IsSuccess => this.exception is null;
+    public bool IsSuccess => exception is null;
 
     /// <summary>
     /// Gets the value of the result if it is successful.
     /// </summary>
-    public T? Value => this.value;
+    public T? Value => value;
 
     /// <summary>
     /// Gets the exception of the result if it is a failure.
     /// </summary>
-    public Exception? Exception => this.exception;
+    public Exception? Exception => exception;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> struct with a successful value.
@@ -33,8 +31,8 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <param name="value">The value of the successful result.</param>
     public Result(T value)
     {
-        this.state = ResultState.Success;
-        this.exception = null;
+        state = ResultState.Success;
+        exception = null;
         this.value = value;
     }
 
@@ -44,9 +42,9 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <param name="error">The exception of the failed result.</param>
     public Result(Exception error)
     {
-        this.exception = error;
-        this.state = ResultState.Failed;
-        this.value = default(T);
+        exception = error;
+        state = ResultState.Failed;
+        value = default;
     }
 
     /// <summary>
@@ -72,7 +70,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         if (IsSuccess && other.IsSuccess)
         {
-            return Comparer<T>.Default.Compare(this.value, other.value);
+            return Comparer<T>.Default.Compare(value, other.value);
         }
         if (IsSuccess)
         {
@@ -94,11 +92,11 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         if (IsSuccess && other.IsSuccess)
         {
-            return EqualityComparer<T>.Default.Equals(this.value, other.value);
+            return EqualityComparer<T>.Default.Equals(value, other.value);
         }
         if (!IsSuccess && !other.IsSuccess)
         {
-            return EqualityComparer<Exception>.Default.Equals(this.exception, other.exception);
+            return EqualityComparer<Exception>.Default.Equals(exception, other.exception);
         }
         return false;
     }
@@ -124,7 +122,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <returns>A hash code for the current object.</returns>
     public override int GetHashCode()
     {
-        return HashCode.Combine(this.state, this.value, this.exception);
+        return HashCode.Combine(state, value, exception);
     }
 
     /// <summary>
@@ -148,7 +146,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <returns>The result of the executed function.</returns>
     public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<Exception, TResult> onFailure)
     {
-        return IsSuccess ? onSuccess(this.value!) : onFailure(this.exception!);
+        return IsSuccess ? onSuccess(value!) : onFailure(exception!);
     }
 
 
@@ -161,11 +159,11 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         if (IsSuccess)
         {
-            onSuccess(this.value!);
+            onSuccess(value!);
         }
         else
         {
-            onFailure(this.exception!);
+            onFailure(exception!);
         }
     }
 
@@ -177,7 +175,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         if (IsSuccess)
         {
-            onSuccess(this.value!);
+            onSuccess(value!);
         }
     }
 
@@ -189,7 +187,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     {
         if (!IsSuccess)
         {
-            onFailure(this.exception!);
+            onFailure(exception!);
         }
     }
 
@@ -279,19 +277,19 @@ public readonly struct Result : IEquatable<Result>
     /// <summary>
     /// Gets a value indicating whether the result is successful.
     /// </summary>
-    public bool IsSuccess => this.exception is null;
+    public bool IsSuccess => exception is null;
 
     /// <summary>
     /// Gets the exception of the result if it is a failure.
     /// </summary>
-    public Exception? Exception => this.exception;
+    public Exception? Exception => exception;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> struct with a successful state.
     /// </summary>
     private Result(bool isSuccess)
     {
-        this.exception = null;
+        exception = null;
     }
 
     /// <summary>
@@ -300,7 +298,7 @@ public readonly struct Result : IEquatable<Result>
     /// <param name="error">The exception of the failed result.</param>
     private Result(Exception error)
     {
-        this.exception = error;
+        exception = error;
     }
 
     /// <summary>
@@ -329,7 +327,7 @@ public readonly struct Result : IEquatable<Result>
         }
         else
         {
-            onFailure(this.exception!);
+            onFailure(exception!);
         }
     }
 
@@ -353,7 +351,7 @@ public readonly struct Result : IEquatable<Result>
     {
         if (!IsSuccess)
         {
-            onFailure(this.exception!);
+            onFailure(exception!);
         }
     }
 
@@ -370,7 +368,7 @@ public readonly struct Result : IEquatable<Result>
         }
         if (!IsSuccess && !other.IsSuccess)
         {
-            return EqualityComparer<Exception>.Default.Equals(this.exception, other.exception);
+            return EqualityComparer<Exception>.Default.Equals(exception, other.exception);
         }
         return false;
     }
@@ -384,7 +382,7 @@ public readonly struct Result : IEquatable<Result>
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(this.exception);
+        return HashCode.Combine(exception);
     }
 
     /// <summary>

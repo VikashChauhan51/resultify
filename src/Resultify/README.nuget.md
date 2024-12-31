@@ -1,7 +1,8 @@
 ﻿
 # ResultifyCore
 
-ResultifyCore is a .NET library providing `Result` and `Option` patterns to simplify error handling and optional values. It includes extension methods for fluent API support and enhanced readability.
+ResultifyCore is a .NET library providing `Result`, `Option`, `Outcome` and `OneOf` patterns to simplify error handling, optional values, and type discrimination.
+It includes extension methods for fluent API support and enhanced readability.
 
 ## Installation
 
@@ -28,8 +29,8 @@ The `Result` pattern represents the outcome of an operation that can either succ
 ```csharp
 using ResultifyCore;
 
-var successResult = Result<int>.Succ(42);
-var failureResult = Result<int>.Fail(new Exception("Something went wrong"));
+var successResult = Result<int>.Success(42);
+var failureResult = Result<int>.Failure(new Exception("Something went wrong"));
 ```
 
 #### Match Method
@@ -48,16 +49,12 @@ Console.WriteLine(matchResult);
 ```csharp
 successResult
     .Do(res => Console.WriteLine("Executing common action"))
-    .OnSuccess(value => Console.WriteLine($"Success with value: {value}"))
-    .OnError(ex => Console.WriteLine($"Error: {ex.Message}"))
     .Tap(value => Console.WriteLine($"Tap into value: {value}"))
     .Map(value => value * 2)
     .OnSuccess(value => Console.WriteLine($"Transformed value: {value}"));
 
 failureResult
     .Do(res => Console.WriteLine("Executing common action"))
-    .OnSuccess(value => Console.WriteLine($"Success with value: {value}"))
-    .OnError(ex => Console.WriteLine($"Error: {ex.Message}"))
     .Tap(value => Console.WriteLine($"Tap into value: {value}"))
     .Map(value => value * 2)
     .OnSuccess(value => Console.WriteLine($"Transformed value: {value}"));
@@ -108,6 +105,71 @@ noneOption
     .OnSome(value => Console.WriteLine($"Transformed value: {value}"));
 ```
 
+### OneOf Pattern
+
+The OneOf pattern allows you to encapsulate multiple possible types for a single value. This is useful for cases where a value can belong to one of several types.
+
+#### Example:
+
+```csharp
+using ResultifyCore;
+
+OneOf<int, string> numberOrString = new OneOf<int, string>("Hello");
+
+#Accessing Values
+if (numberOrString.IsT1)
+{
+    Console.WriteLine($"Value is of type T1: {numberOrString.AsT1}");
+}
+else if (numberOrString.IsT2)
+{
+    Console.WriteLine($"Value is of type T2: {numberOrString.AsT2}");
+}
+
+#Match Method
+var matchResult = numberOrString.Match(
+    matchT1: number => $"Number: {number}",
+    matchT2: text => $"String: {text}"
+);
+Console.WriteLine(matchResult);
+
+```
+
+### Outcome Pattern
+
+The Outcome pattern is a clean, functional approach to handling success and failure scenarios in code, providing an alternative to exceptions for managing errors and failures.
+
+### Example:
+
+```csharp
+public static Outcome ValidateInput(string input)
+{
+    if (string.IsNullOrWhiteSpace(input))
+    {
+        return Outcome.Failure(new OutcomeError("VALIDATION_ERROR", "Input cannot be null or whitespace."));
+    }
+
+    return Outcome.Success();
+}
+
+public static Outcome<int> ParseNumber(string input)
+{
+    if (int.TryParse(input, out var number))
+    {
+        return Outcome<int>.Success(number);
+    }
+
+    return Outcome<int>.Failure(new OutcomeError("PARSE_ERROR", "Invalid number format."));
+}
+
+var result = ParseNumber("abc");
+
+result.Match(
+        onSuccess: value => Console.WriteLine($"Parsed number: {value}"),
+        onFailure: errors => Console.WriteLine($"Failed to parse number: {string.Join(", ", errors)}")
+    );
+
+```
 ### Extensions
 
 ResultifyCore provides several extension methods to facilitate fluent API and method chaining.
