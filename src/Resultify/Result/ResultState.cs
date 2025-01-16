@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Result;
+﻿namespace ResultifyCore;
 
 
 /// <summary>

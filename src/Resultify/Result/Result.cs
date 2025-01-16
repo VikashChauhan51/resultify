@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Result;
+﻿namespace ResultifyCore;
 
 /// <summary>
 /// Represents the result of an operation that can succeed or fail.

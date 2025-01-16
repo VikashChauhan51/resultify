@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Outcome;
+﻿namespace ResultifyCore;
 public readonly record struct OutcomeError : IEquatable<OutcomeError>
 {
     public string Code { get; }

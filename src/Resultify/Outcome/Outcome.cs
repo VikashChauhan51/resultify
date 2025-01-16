@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ResultifyCore.Outcome;
+namespace ResultifyCore;
 
 public class Outcome : IEqualityComparer<Outcome>
 {

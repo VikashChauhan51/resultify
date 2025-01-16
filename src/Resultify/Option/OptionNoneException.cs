@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Option;
+﻿namespace ResultifyCore;
 
 /// <summary>
 /// Exception thrown when an attempt is made to unwrap an Option that has no value.

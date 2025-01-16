@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.OneOf.Types;
+﻿namespace ResultifyCore.Types;
 
 
 /// <summary>

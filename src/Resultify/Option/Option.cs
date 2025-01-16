@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.Option;
+﻿namespace ResultifyCore;
 
 /// <summary>
 /// Represents an option type that can contain a value or be empty (None).

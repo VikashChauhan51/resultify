@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.OneOf;
+﻿namespace ResultifyCore;
 
 /// <summary>
 /// Represents a value that can be one of three possible types.

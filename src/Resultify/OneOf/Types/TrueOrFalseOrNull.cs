@@ -1,4 +1,4 @@
-﻿namespace ResultifyCore.OneOf.Types;
+﻿namespace ResultifyCore.Types;
 
 /// <summary>
 /// Represents a value that can be True, False, or Null.
