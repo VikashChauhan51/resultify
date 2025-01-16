@@ -5,7 +5,6 @@ namespace ResultifyCore.Outcome;
 public class Outcome : IEqualityComparer<Outcome>
 {
     public bool IsSuccess { get; }
-    public bool IsFailure => !IsSuccess;
     public IEnumerable<OutcomeError> Errors { get; } = [];
 
     public Outcome(bool isSuccess) : this(isSuccess, [])
@@ -101,7 +100,6 @@ public class Outcome : IEqualityComparer<Outcome>
 public class Outcome<T> : IEqualityComparer<Outcome<T>>
 {
     public bool IsSuccess { get; }
-    public bool IsFailure => !IsSuccess;
     public T? Value { get; }
     public IEnumerable<OutcomeError> Errors { get; } = [];
 
