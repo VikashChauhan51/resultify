@@ -8,7 +8,6 @@ public class OptionTests
     {
         // Arrange
         var value = 42;
-
         // Act
         var option = Option<int>.Some(value);
 

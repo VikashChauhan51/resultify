@@ -7,7 +7,6 @@ public class ResultTests
     public void Success_CreatesSuccessfulResult()
     {
         var result = Result<int>.Success(42);
-
         Assert.True(result.IsSuccess);
         Assert.Equal(42, result.Value);
         Assert.Null(result.Exception);

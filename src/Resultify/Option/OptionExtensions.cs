@@ -88,6 +88,56 @@ public static class OptionExtensions
         }
         return option;
     }
+
+    /// <summary>
+    /// Creates an option containing a value if the value is not null; otherwise, returns None.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="value">The value to be encapsulated in the option.</param>
+    /// <returns>An <see cref="Option{T}"/> containing the specified value, or None if the value is null.</returns>
+    public static Option<T> ToOption<T>(this T value) =>
+        value == null ? Option.None<T>() : Option.Some(value);
+
+    /// <summary>
+    /// If the option has a value, executes the provided action with the value; otherwise, does nothing.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the option.</typeparam>
+    /// <param name="option">The option to execute the action on.</param>
+    /// <param name="action">The action to perform if the option has a value.</param>
+    public static void IfSome<T>(this Option<T> option, Action<T> action)
+    {
+        if (option.IsSome)
+            action(option.Unwrap());
+    }
+
+    /// <summary>
+    /// If the option has no value, executes the provided action; otherwise, does nothing.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the option.</typeparam>
+    /// <param name="option">The option to execute the action on.</param>
+    /// <param name="action">The action to perform if the option has no value.</param>
+    public static void IfNone<T>(this Option<T> option, Action action)
+    {
+        if (option.IsNone)
+            action();
+    }
+
+    /// <summary>
+    /// Creates an option containing a value.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the option.</typeparam>
+    /// <param name="value">The value to be encapsulated in the option.</param>
+    /// <returns>An <see cref="Option{T}"/> containing the specified value.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the value is null. 
+    /// This method should be used when a value is present, otherwise, use <see cref="None{T}"/>.</exception>
+    public static Option<T> Some<T>(this T value)
+    {
+        if (value == null)
+            throw new ArgumentNullException(nameof(value), "Option cannot be null.");
+
+        return Option<T>.Some(value);
+    }
+
 }
 
 

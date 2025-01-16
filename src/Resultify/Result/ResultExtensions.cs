@@ -57,6 +57,50 @@ public static class ResultExtensions
         return result;
     }
 
+    /// <summary>
+    /// Creates a successful result containing the specified value.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result.</typeparam>
+    /// <param name="value">The value to be encapsulated in the successful result.</param>
+    /// <returns>A <see cref="Result{T}"/> containing the specified value.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>. 
+    /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
+    public static Result<T> Success<T>(this T value)
+    {
+        if (value is Exception)
+            throw new InvalidOperationException("Cannot use an Exception as a value.");
+        return new Result<T>(value);
+    }
+
+    /// <summary>
+    /// Creates a failed result containing the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in failure results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the failure result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a failure with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Failure results must be initialized with a valid exception.</exception>
+    public static Result<T> Failure<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(exception);
+    }
+
+    /// <summary>
+    /// Creates a failed result containing the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the failure result.</param>
+    /// <returns>A <see cref="Result"/> representing a failure with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Failure results must be initialized with a valid exception.</exception>
+    public static Result Failure(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(exception);
+    }
+
 }
 
 

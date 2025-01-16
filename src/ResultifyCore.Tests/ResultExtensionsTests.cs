@@ -111,5 +111,82 @@ public class ResultExtensionsTests
         Assert.Equal(0, tappedValue);
         Assert.Equal(result, returnedResult);
     }
+
+    [Fact]
+    public void Success_ShouldReturnResult_WhenValueIsNotException()
+    {
+        // Arrange
+        var value = "Test Value";
+
+        // Act
+        var result = value.Success();
+
+        // Assert
+        Assert.True(result.IsSuccess); // Ensure it's a success result
+        Assert.Equal(value, result.Value); // Ensure the value is correctly set
+    }
+
+    [Fact]
+    public void Success_ShouldThrowInvalidOperationException_WhenValueIsException()
+    {
+        // Arrange
+        var value = new Exception("Test Exception");
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => value.Success());
+        Assert.Equal("Cannot use an Exception as a value.", exception.Message);
+    }
+
+    [Fact]
+    public void Failure_ShouldReturnResult_WhenExceptionIsValid()
+    {
+        // Arrange
+        var exception = new Exception("Test Exception");
+
+        // Act
+        var result = exception.Failure<string>(); // Testing with a generic parameter
+
+        // Assert
+        Assert.False(result.IsSuccess); // Ensure it's a failure result
+        Assert.Equal(exception, result.Exception); // Ensure the exception is correctly set
+    }
+
+    [Fact]
+    public void Failure_ShouldThrowArgumentNullException_WhenExceptionIsNull()
+    {
+        // Arrange
+        Exception exception = null;
+
+        // Act & Assert
+        var ex = Assert.Throws<ArgumentNullException>(() => exception.Failure<string>());
+        Assert.Equal("exception", ex.ParamName); // Ensure the exception is for the correct parameter
+    }
+
+    [Fact]
+    public void Failure_ShouldReturnResult_WhenExceptionIsValid_ForNonGenericResult()
+    {
+        // Arrange
+        var exception = new Exception("Test Exception");
+
+        // Act
+        var result = exception.Failure();
+
+        // Assert
+        Assert.False(result.IsSuccess); // Ensure it's a failure result
+        Assert.Equal(exception, result.Exception); // Ensure the exception is correctly set
+    }
+
+    [Fact]
+    public void Failure_ShouldThrowArgumentNullException_WhenExceptionIsNull_ForNonGenericResult()
+    {
+        // Arrange
+        Exception exception = null;
+
+        // Act & Assert
+        var ex = Assert.Throws<ArgumentNullException>(() => exception.Failure());
+        Assert.Equal("exception", ex.ParamName); // Ensure the exception is for the correct parameter
+    }
+
+
 }
 
