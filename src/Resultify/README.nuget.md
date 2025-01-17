@@ -114,6 +114,7 @@ using ResultifyCore;
 
 var someOption = Option<int>.Some(42);  // Option containing a value
 var noneOption = Option<int>.None;      // Option with no value
+ var optionResult = 42.Some();
 ```
 
 #### Match Method for Option
@@ -162,6 +163,9 @@ The `Outcome` pattern provides an alternative to exceptions for managing errors 
 #### Example:
 
 ```csharp
+
+var optionResult = 42.SuccessOutcome();
+
 public static Outcome ValidateInput(string input)
 {
     if (string.IsNullOrWhiteSpace(input))
