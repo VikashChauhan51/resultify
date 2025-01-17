@@ -1,6 +1,12 @@
 
 # ResultifyCore
 
+[![NuGet Version](https://img.shields.io/nuget/v/ResultifyCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/ResultifyCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore/)
+[![Build Status](https://github.com/VikashChauhan51/resultify/actions/workflows/build.yml/badge.svg)](https://github.com/VikashChauhan51/resultify/actions)
+[![License](https://img.shields.io/github/license/VikashChauhan51/resultify.svg?style=flat-square)](https://github.com/VikashChauhan51/resultify/blob/main/LICENSE)
+
+
 **ResultifyCore** is a .NET library providing `Result`, `Option`, `Outcome`, `OneOf` and `Guard` patterns to simplify error handling, optional values, and type discrimination. It includes extension methods for fluent API support and enhanced readability.
 
 ## Installation
