@@ -1,17 +1,18 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ResultifyCore;
 
 public class Outcome : IEqualityComparer<Outcome>
 {
-    public bool IsSuccess { get; }
+    public OutcomeStatus Status { get; }
     public IEnumerable<OutcomeError> Errors { get; } = [];
 
-    public Outcome(bool isSuccess) : this(isSuccess, [])
+    public Outcome(OutcomeStatus status) : this(status, [])
     {
     }
 
-    public Outcome(IEnumerable<OutcomeError> errors) : this(false, errors)
+    public Outcome(IEnumerable<OutcomeError> errors) : this(OutcomeStatus.Failure, errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -19,17 +20,16 @@ public class Outcome : IEqualityComparer<Outcome>
         }
     }
 
-    private Outcome(bool isSuccess, IEnumerable<OutcomeError> errors)
+    private Outcome(OutcomeStatus status, IEnumerable<OutcomeError> errors)
     {
-        IsSuccess = isSuccess;
+        Status = status;
         Errors = errors ?? [];
     }
 
     public static Outcome Success()
     {
-        return new Outcome(true, []);
+        return new Outcome(OutcomeStatus.Success, []);
     }
-
     public static Outcome Failure(params OutcomeError[] errors)
     {
         if (errors == null || errors.Length == 0)
@@ -37,9 +37,8 @@ public class Outcome : IEqualityComparer<Outcome>
             throw new ArgumentException("At least one error must be provided.", nameof(errors));
         }
 
-        return new Outcome(false, errors);
+        return new Outcome(OutcomeStatus.Failure, errors);
     }
-
     public static Outcome Failure(IEnumerable<OutcomeError> errors)
     {
         if (errors == null || !errors.Any())
@@ -47,27 +46,120 @@ public class Outcome : IEqualityComparer<Outcome>
             throw new ArgumentException("At least one error must be provided.", nameof(errors));
         }
 
-        return new Outcome(false, errors);
+        return new Outcome(OutcomeStatus.Failure, errors);
+    }
+    public static Outcome Conflict(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Conflict, errors);
+    }
+    public static Outcome Conflict(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Conflict, errors);
+    }
+    public static Outcome Problem(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Problem, errors);
+    }
+    public static Outcome Problem(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Problem, errors);
+    }
+    public static Outcome Validation(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Validation, errors);
+    }
+    public static Outcome Validation(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Validation, errors);
+    }
+    public static Outcome NotFound(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.NotFound, errors);
+    }
+    public static Outcome NotFound(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.NotFound, errors);
+    }
+    public static Outcome Unauthorized(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Unauthorized, errors);
+    }
+    public static Outcome Unauthorized(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome(OutcomeStatus.Unauthorized, errors);
     }
 
-    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
+    public void Match(Action onSuccess, Action<OutcomeStatus, IEnumerable<OutcomeError>> onFailure)
     {
-        if (IsSuccess)
+        if (Status == OutcomeStatus.Success)
         {
             onSuccess();
         }
         else
         {
-            onFailure(Errors);
+            onFailure(Status, Errors);
         }
     }
-
+    public TResult Match<TResult>(Func<TResult> onSuccess, Func<OutcomeStatus, IEnumerable<OutcomeError>, TResult> onFailure)
+    {
+        return Status == OutcomeStatus.Success ? onSuccess() : onFailure(Status, Errors!);
+    }
     public bool Equals(Outcome? other)
     {
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
 
-        return IsSuccess == other.IsSuccess && Errors.SequenceEqual(other.Errors);
+        return Status == other.Status && Errors.SequenceEqual(other.Errors);
     }
 
     public override bool Equals(object? obj) => obj is Outcome other && Equals(other);
@@ -75,7 +167,7 @@ public class Outcome : IEqualityComparer<Outcome>
     public override int GetHashCode()
     {
         var hash = new HashCode();
-        hash.Add(IsSuccess);
+        hash.Add(Status);
         foreach (var error in Errors)
         {
             hash.Add(error);
@@ -99,15 +191,15 @@ public class Outcome : IEqualityComparer<Outcome>
 
 public class Outcome<T> : IEqualityComparer<Outcome<T>>
 {
-    public bool IsSuccess { get; }
+    public OutcomeStatus Status { get; }
     public T? Value { get; }
     public IEnumerable<OutcomeError> Errors { get; } = [];
 
-    public Outcome(T value) : this(true, value, [])
+    public Outcome(T value) : this(OutcomeStatus.Success, value, [])
     {
     }
 
-    public Outcome(IEnumerable<OutcomeError> errors) : this(false, default, errors)
+    public Outcome(IEnumerable<OutcomeError> errors) : this(OutcomeStatus.Failure, default!, errors)
     {
         if (errors == null || !errors.Any())
         {
@@ -115,9 +207,9 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         }
     }
 
-    private Outcome(bool isSuccess, T value, IEnumerable<OutcomeError> errors)
+    private Outcome(OutcomeStatus status, T value, IEnumerable<OutcomeError> errors)
     {
-        IsSuccess = isSuccess;
+        Status = status;
         Value = value;
         Errors = errors ?? [];
     }
@@ -129,7 +221,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
             throw new ArgumentNullException(nameof(value), "Success value cannot be null.");
         }
 
-        return new Outcome<T>(true, value, []);
+        return new Outcome<T>(OutcomeStatus.Success, value, []);
     }
 
     public static Outcome<T> Failure(params OutcomeError[] errors)
@@ -139,7 +231,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
             throw new ArgumentException("At least one error must be provided.", nameof(errors));
         }
 
-        return new Outcome<T>(false, default, errors);
+        return new Outcome<T>(OutcomeStatus.Failure, default!, errors);
     }
 
     public static Outcome<T> Failure(IEnumerable<OutcomeError> errors)
@@ -149,12 +241,102 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
             throw new ArgumentException("At least one error must be provided.", nameof(errors));
         }
 
-        return new Outcome<T>(false, default, errors);
+        return new Outcome<T>(OutcomeStatus.Failure, default!, errors);
     }
 
+    public static Outcome<T> Conflict(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Conflict, default!, errors);
+    }
+    public static Outcome<T> Conflict(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Conflict, default!, errors);
+    }
+    public static Outcome<T> Problem(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Problem, default!, errors);
+    }
+    public static Outcome<T> Problem(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Problem, default!, errors);
+    }
+    public static Outcome<T> Validation(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Validation, default!, errors);
+    }
+    public static Outcome<T> Validation(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Validation, default!, errors);
+    }
+    public static Outcome<T> NotFound(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.NotFound, default!, errors);
+    }
+    public static Outcome<T> NotFound(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.NotFound, default!, errors);
+    }
+    public static Outcome<T> Unauthorized(params OutcomeError[] errors)
+    {
+        if (errors == null || errors.Length == 0)
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Unauthorized, default!, errors);
+    }
+    public static Outcome<T> Unauthorized(IEnumerable<OutcomeError> errors)
+    {
+        if (errors == null || !errors.Any())
+        {
+            throw new ArgumentException("At least one error must be provided.", nameof(errors));
+        }
+
+        return new Outcome<T>(OutcomeStatus.Unauthorized, default!, errors);
+    }
     public T Unwrap()
     {
-        if (!IsSuccess)
+        if (Status != OutcomeStatus.Success)
         {
             throw new InvalidOperationException("Cannot unwrap a failed outcome.");
         }
@@ -162,21 +344,21 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         return Value!;
     }
 
-    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
+    public void Match(Action onSuccess, Action<OutcomeStatus, IEnumerable<OutcomeError>> onFailure)
     {
-        if (IsSuccess)
+        if (Status == OutcomeStatus.Success)
         {
             onSuccess();
         }
         else
         {
-            onFailure(Errors);
+            onFailure(Status, Errors);
         }
     }
 
-    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<IEnumerable<OutcomeError>, TResult> onFailure)
+    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<OutcomeStatus, IEnumerable<OutcomeError>, TResult> onFailure)
     {
-        return IsSuccess ? onSuccess(Value!) : onFailure(Errors);
+        return Status == OutcomeStatus.Success ? onSuccess(Value!) : onFailure(Status, Errors);
     }
 
     public bool Equals(Outcome<T>? other)
@@ -184,7 +366,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
         if (other is null) return false;
         if (ReferenceEquals(this, other)) return true;
 
-        return IsSuccess == other.IsSuccess &&
+        return Status == other.Status &&
                EqualityComparer<T>.Default.Equals(Value, other.Value) &&
                Errors.SequenceEqual(other.Errors);
     }
@@ -194,7 +376,7 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
     public override int GetHashCode()
     {
         var hash = new HashCode();
-        hash.Add(IsSuccess);
+        hash.Add(Status);
         hash.Add(Value);
         foreach (var error in Errors)
         {

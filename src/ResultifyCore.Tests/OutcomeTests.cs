@@ -13,7 +13,7 @@ public class OutcomeTests
         var outcome = Outcome.Success();
 
         // Assert
-        Assert.True(outcome.IsSuccess);
+        Assert.True(outcome.Status == OutcomeStatus.Success);
         Assert.Empty(outcome.Errors);
     }
 
@@ -27,7 +27,7 @@ public class OutcomeTests
         var outcome = Outcome.Failure(errors);
 
         // Assert
-        Assert.False(outcome.IsSuccess);
+        Assert.False(outcome.Status != OutcomeStatus.Success);
         Assert.NotEmpty(outcome.Errors);
         Assert.Equivalent(errors, outcome.Errors);
     }
@@ -52,11 +52,11 @@ public class OutcomeTests
         // Act & Assert
         successOutcome.Match(
             onSuccess: () => { /* No exception expected */ },
-            onFailure: _ => throw new InvalidOperationException("Should not call onFailure"));
+            onFailure: (status, errors) => throw new InvalidOperationException("Should not call onFailure"));
 
         failureOutcome.Match(
             onSuccess: () => throw new InvalidOperationException("Should not call onSuccess"),
-            onFailure: errors => Assert.True(errors.Any(e => e.Code == "E001")));
+            onFailure: (status, errors) => Assert.True(errors.Any(e => e.Code == "E001")));
     }
 
     [Fact]
@@ -70,6 +70,6 @@ public class OutcomeTests
         var isEqual = outcome1.Equals(outcome2);
 
         // Assert
-        Assert.True(isEqual);   
+        Assert.True(isEqual);
     }
 }
