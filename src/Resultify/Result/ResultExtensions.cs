@@ -25,7 +25,7 @@ public static class ResultExtensions
     /// <returns>A new result with the transformed value if successful, otherwise the original failure result.</returns>
     public static Result<U> Map<T, U>(this Result<T> result, Func<T, U> map)
     {
-        return result.IsSuccess ? Result<U>.Success(map(result.Value!)) : Result<U>.Failure(result.Exception!);
+        return result.Status == ResultState.Success ? Result<U>.Success(map(result.Value!)) : Result<U>.Failure(result.Status, result.Exception!);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public static class ResultExtensions
     /// <returns>The result of the next operation if the current result is successful, otherwise the original failure result.</returns>
     public static Result<U> Bind<T, U>(this Result<T> result, Func<T, Result<U>> bind)
     {
-        return result.IsSuccess ? bind(result.Value!) : Result<U>.Failure(result.Exception!);
+        return result.Status == ResultState.Success ? bind(result.Value!) : Result<U>.Failure(result.Status, result.Exception!);
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public static class ResultExtensions
     /// <returns>The original result to allow method chaining.</returns>
     public static Result<T> Tap<T>(this Result<T> result, Action<T> tapAction)
     {
-        if (result.IsSuccess)
+        if (result.Status == ResultState.Success)
         {
             tapAction(result.Value!);
         }
@@ -84,7 +84,42 @@ public static class ResultExtensions
     {
         if (exception == null)
             throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
-        return new Result<T>(exception);
+        return new Result<T>(ResultState.Failure, exception);
+    }
+
+    public static Result<T> Conflict<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Conflict, exception);
+    }
+
+    public static Result<T> Problem<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Problem, exception);
+    }
+
+    public static Result<T> Validation<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Validation, exception);
+    }
+
+    public static Result<T> NotFound<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.NotFound, exception);
+    }
+
+    public static Result<T> Unauthorized<T>(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Unauthorized, exception);
     }
 
     /// <summary>
@@ -98,7 +133,42 @@ public static class ResultExtensions
     {
         if (exception == null)
             throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
-        return Result.Failure(exception);
+        return Result.Failure(ResultState.Failure, exception);
+    }
+
+    public static Result Conflict(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Conflict, exception);
+    }
+
+    public static Result Problem(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Problem, exception);
+    }
+
+    public static Result Validation(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Validation, exception);
+    }
+
+    public static Result NotFound(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.NotFound, exception);
+    }
+
+    public static Result Unauthorized(this Exception exception)
+    {
+        if (exception == null)
+            throw new ArgumentNullException(nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Unauthorized, exception);
     }
 
 }

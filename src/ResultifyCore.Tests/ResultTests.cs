@@ -7,7 +7,7 @@ public class ResultTests
     public void Success_CreatesSuccessfulResult()
     {
         var result = Result<int>.Success(42);
-        Assert.True(result.IsSuccess);
+        Assert.True(result.Status == ResultState.Success);
         Assert.Equal(42, result.Value);
         Assert.Null(result.Exception);
     }
@@ -16,9 +16,9 @@ public class ResultTests
     public void Failure_CreatesFailedResult()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
 
-        Assert.False(result.IsSuccess);
+        Assert.True(result.Status != ResultState.Success);
         Assert.Equal(exception, result.Exception);
         Assert.Equal(default(int),result.Value);
     }
@@ -28,7 +28,7 @@ public class ResultTests
     {
         Result<int> result = 42;
 
-        Assert.True(result.IsSuccess);
+        Assert.True(result.Status == ResultState.Success);
         Assert.Equal(42, result.Value);
         Assert.Null(result.Exception);
     }
@@ -39,7 +39,7 @@ public class ResultTests
         var exception = new InvalidOperationException("Test error");
         Result<int> result = exception;
 
-        Assert.False(result.IsSuccess);
+        Assert.True(result.Status != ResultState.Success);
         Assert.Equal(exception, result.Exception);
         Assert.Equal(default(int),result.Value);
     }
@@ -60,7 +60,7 @@ public class ResultTests
     public void Match_ExecutesOnFailureFunction_WhenResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
         var output = result.Match(
             value => value.ToString(),
             error => error.Message
@@ -89,7 +89,7 @@ public class ResultTests
     public void Match_WithAction_ExecutesOnFailureAction_WhenResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
         var successExecuted = false;
         var failureExecuted = false;
 
@@ -117,7 +117,7 @@ public class ResultTests
     public void OnFailure_ExecutesAction_WhenResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
         var executed = false;
 
         result.OnFailure(error => executed = true);
@@ -137,7 +137,7 @@ public class ResultTests
     public void Unwrap_ThrowsException_WhenResultIsFailed()
     {
         var exception = new ResultFailureException();
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
 
         Assert.Throws<ResultFailureException>(() => result.Unwrap());
     }
@@ -155,8 +155,8 @@ public class ResultTests
     public void Equals_ReturnsTrue_ForEqualFailedResults()
     {
         var exception = new InvalidOperationException("Test error");
-        var result1 = Result<int>.Failure(exception);
-        var result2 = Result<int>.Failure(exception);
+        var result1 = Result<int>.Failure(ResultState.Failure, exception);
+        var result2 = Result<int>.Failure(ResultState.Failure, exception);
 
         Assert.True(result1.Equals(result2));
     }
@@ -165,7 +165,7 @@ public class ResultTests
     public void Equals_ReturnsFalse_ForDifferentResults()
     {
         var result1 = Result<int>.Success(42);
-        var result2 = Result<int>.Failure(new InvalidOperationException("Test error"));
+        var result2 = Result<int>.Failure(ResultState.Failure, new InvalidOperationException("Test error"));
 
         Assert.False(result1.Equals(result2));
     }
@@ -200,7 +200,7 @@ public class ResultTests
     [Fact]
     public void CompareTo_ReturnsNegative_WhenOtherResultIsSuccessfulAndCurrentIsFailed()
     {
-        var result1 = Result<int>.Failure(new InvalidOperationException("Test error"));
+        var result1 = Result<int>.Failure(ResultState.Failure, new InvalidOperationException("Test error"));
         var result2 = Result<int>.Success(42);
 
         Assert.True(result1.CompareTo(result2) < 0);
@@ -210,7 +210,7 @@ public class ResultTests
     public void CompareTo_ReturnsPositive_WhenCurrentResultIsSuccessfulAndOtherIsFailed()
     {
         var result1 = Result<int>.Success(42);
-        var result2 = Result<int>.Failure(new InvalidOperationException("Test error"));
+        var result2 = Result<int>.Failure(ResultState.Failure, new InvalidOperationException("Test error"));
 
         Assert.True(result1.CompareTo(result2) > 0);
     }
@@ -220,8 +220,8 @@ public class ResultTests
     {
         var exception1 = new InvalidOperationException("Test error");
         var exception2 = new InvalidOperationException("Test error");
-        var result1 = Result<int>.Failure(exception1);
-        var result2 = Result<int>.Failure(exception2);
+        var result1 = Result<int>.Failure(ResultState.Failure, exception1);
+        var result2 = Result<int>.Failure(ResultState.Failure, exception2);
 
         Assert.Equal(0, result1.CompareTo(result2));
     }

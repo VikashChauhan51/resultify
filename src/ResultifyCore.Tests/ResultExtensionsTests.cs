@@ -11,7 +11,7 @@ public class ResultExtensionsTests
 
         var returnedResult = result.Do(r =>
         {
-            executed = r.IsSuccess;
+            executed = r.Status == ResultState.Success;
         });
 
         Assert.True(executed);
@@ -25,7 +25,7 @@ public class ResultExtensionsTests
 
         var mappedResult = result.Map(x => x.ToString());
 
-        Assert.True(mappedResult.IsSuccess);
+        Assert.True(mappedResult.Status == ResultState.Success);
         Assert.Equal("42", mappedResult.Value);
         Assert.Null(mappedResult.Exception);
     }
@@ -34,11 +34,11 @@ public class ResultExtensionsTests
     public void Map_ReturnsFailureResult_WhenOriginalResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
 
         var mappedResult = result.Map(x => x.ToString());
 
-        Assert.False(mappedResult.IsSuccess);
+        Assert.True(mappedResult.Status != ResultState.Success);
         Assert.Equal(exception, mappedResult.Exception);
         Assert.Null(mappedResult.Value);
     }
@@ -50,7 +50,7 @@ public class ResultExtensionsTests
 
         var chainedResult = result.Bind(x => Result<string>.Success($"Value: {x}"));
 
-        Assert.True(chainedResult.IsSuccess);
+        Assert.True(chainedResult.Status == ResultState.Success);
         Assert.Equal("Value: 42", chainedResult.Value);
         Assert.Null(chainedResult.Exception);
     }
@@ -59,11 +59,11 @@ public class ResultExtensionsTests
     public void Bind_ReturnsOriginalFailureResult_WhenFirstResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure,exception);
 
         var chainedResult = result.Bind(x => Result<string>.Success($"Value: {x}"));
 
-        Assert.False(chainedResult.IsSuccess);
+        Assert.True(chainedResult.Status != ResultState.Success);
         Assert.Equal(exception, chainedResult.Exception);
         Assert.Null(chainedResult.Value);
     }
@@ -74,9 +74,9 @@ public class ResultExtensionsTests
         var result = Result<int>.Success(42);
         var chainedException = new InvalidOperationException("Chained error");
 
-        var chainedResult = result.Bind(x => Result<string>.Failure(chainedException));
+        var chainedResult = result.Bind(x => Result<string>.Failure(ResultState.Failure, chainedException));
 
-        Assert.False(chainedResult.IsSuccess);
+        Assert.False(chainedResult.Status == ResultState.Success);
         Assert.Equal(chainedException, chainedResult.Exception);
         Assert.Null(chainedResult.Value);
     }
@@ -100,7 +100,7 @@ public class ResultExtensionsTests
     public void Tap_DoesNotExecuteActionForFailureResult()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(exception);
+        var result = Result<int>.Failure(ResultState.Failure, exception);
         var tappedValue = 0;
 
         var returnedResult = result.Tap(x =>
@@ -122,7 +122,7 @@ public class ResultExtensionsTests
         var result = value.Success();
 
         // Assert
-        Assert.True(result.IsSuccess); // Ensure it's a success result
+        Assert.True(result.Status == ResultState.Success); // Ensure it's a success result
         Assert.Equal(value, result.Value); // Ensure the value is correctly set
     }
 
@@ -147,7 +147,7 @@ public class ResultExtensionsTests
         var result = exception.Failure<string>(); // Testing with a generic parameter
 
         // Assert
-        Assert.False(result.IsSuccess); // Ensure it's a failure result
+        Assert.True(result.Status != ResultState.Success); // Ensure it's a failure result
         Assert.Equal(exception, result.Exception); // Ensure the exception is correctly set
     }
 
@@ -172,7 +172,7 @@ public class ResultExtensionsTests
         var result = exception.Failure();
 
         // Assert
-        Assert.False(result.IsSuccess); // Ensure it's a failure result
+        Assert.True(result.Status != ResultState.Success); // Ensure it's a failure result
         Assert.Equal(exception, result.Exception); // Ensure the exception is correctly set
     }
 

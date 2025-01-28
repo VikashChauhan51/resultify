@@ -6,13 +6,11 @@
 /// </summary>
 public enum ResultState : byte
 {
-    /// <summary>
-    /// Indicates that the result is successful.
-    /// </summary>
-    Success,
-
-    /// <summary>
-    /// Indicates that the result has failed.
-    /// </summary>
-    Failed
+    Success = 1,
+    Failure = 2,
+    Validation = 3,
+    Problem = 4,
+    NotFound = 5,
+    Conflict = 6,
+    Unauthorized = 7
 }

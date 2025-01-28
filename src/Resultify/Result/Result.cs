@@ -13,7 +13,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <summary>
     /// Gets a value indicating whether the result is successful.
     /// </summary>
-    public bool IsSuccess => exception is null;
+    public ResultState Status => state;
 
     /// <summary>
     /// Gets the value of the result if it is successful.
@@ -39,11 +39,12 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <summary>
     /// Initializes a new instance of the <see cref="Result{T}"/> struct with a failure exception.
     /// </summary>
+    /// <param name="state">The state of the failed result.</param>
     /// <param name="error">The exception of the failed result.</param>
-    public Result(Exception error)
+    public Result(ResultState state, Exception error)
     {
         exception = error;
-        state = ResultState.Failed;
+        this.state = state;
         value = default;
     }
 
@@ -57,9 +58,10 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <summary>
     /// Creates a failed result.
     /// </summary>
+    /// <param name="state">The state of the failed result.</param>
     /// <param name="error">The exception of the failed result.</param>
     /// <returns>A failed <see cref="Result{T}"/>.</returns>
-    public static Result<T> Failure(Exception error) => new Result<T>(error);
+    public static Result<T> Failure(ResultState state, Exception error) => new Result<T>(state, error);
 
     /// <summary>
     /// Compares this instance with another <see cref="Result{T}"/> and returns an integer that indicates whether this instance precedes, follows, or occurs in the same position in the sort order as the other <see cref="Result{T}"/>.
@@ -68,15 +70,15 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <returns>A value that indicates the relative order of the objects being compared.</returns>
     public int CompareTo(Result<T> other)
     {
-        if (IsSuccess && other.IsSuccess)
+        if (Status == ResultState.Success && other.Status == ResultState.Success)
         {
             return Comparer<T>.Default.Compare(value, other.value);
         }
-        if (IsSuccess)
+        if (Status == ResultState.Success)
         {
             return 1;
         }
-        if (other.IsSuccess)
+        if (other.Status == ResultState.Success)
         {
             return -1;
         }
@@ -90,11 +92,11 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <returns><c>true</c> if the value or exception of the specified <see cref="Result{T}"/> is equal to the value or exception of this instance; otherwise, <c>false</c>.</returns>
     public bool Equals(Result<T> other)
     {
-        if (IsSuccess && other.IsSuccess)
+        if (Status == ResultState.Success && other.Status == ResultState.Success)
         {
-            return EqualityComparer<T>.Default.Equals(value, other.value);
+            return true;
         }
-        if (!IsSuccess && !other.IsSuccess)
+        if (Status != ResultState.Success && other.Status != ResultState.Success)
         {
             return EqualityComparer<Exception>.Default.Equals(exception, other.exception);
         }
@@ -135,7 +137,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// Implicitly converts an exception to a failed <see cref="Result{T}"/> containing that exception.
     /// </summary>
     /// <param name="error">The exception to convert.</param>
-    public static implicit operator Result<T>(Exception error) => new Result<T>(error);
+    public static implicit operator Result<T>(Exception error) => new Result<T>(ResultState.Failure, error);
 
     /// <summary>
     /// Executes one of the specified functions based on whether the result is successful or failed.
@@ -146,7 +148,20 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <returns>The result of the executed function.</returns>
     public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<Exception, TResult> onFailure)
     {
-        return IsSuccess ? onSuccess(value!) : onFailure(exception!);
+        return Status == ResultState.Success ? onSuccess(value!) : onFailure(exception!);
+    }
+
+
+    /// <summary>
+    /// Executes one of the specified functions based on whether the result is successful or failed.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result produced by the functions.</typeparam>
+    /// <param name="onSuccess">The function to execute if the result is successful.</param>
+    /// <param name="onFailure">The function to execute if the result is failed.</param>
+    /// <returns>The result of the executed function.</returns>
+    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<ResultState, Exception, TResult> onFailure)
+    {
+        return Status == ResultState.Success ? onSuccess(value!) : onFailure(state, exception!);
     }
 
 
@@ -157,7 +172,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <param name="onFailure">The function to execute if the result is failed.</param>
     public void Match(Action<T> onSuccess, Action<Exception> onFailure)
     {
-        if (IsSuccess)
+        if (Status == ResultState.Success)
         {
             onSuccess(value!);
         }
@@ -168,12 +183,29 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     }
 
     /// <summary>
+    /// Executes one of the specified functions based on whether the result is successful or failed.
+    /// </summary>
+    /// <param name="onSuccess">The function to execute if the result is successful.</param>
+    /// <param name="onFailure">The function to execute if the result is failed.</param>
+    public void Match(Action<T> onSuccess, Action<ResultState, Exception> onFailure)
+    {
+        if (Status == ResultState.Success)
+        {
+            onSuccess(value!);
+        }
+        else
+        {
+            onFailure(state, exception!);
+        }
+    }
+
+    /// <summary>
     /// Executes the specified action if the result is successful.
     /// </summary>
     /// <param name="onSuccess">The action to execute if the result is successful.</param>
     public void OnSuccess(Action<T> onSuccess)
     {
-        if (IsSuccess)
+        if (Status == ResultState.Success)
         {
             onSuccess(value!);
         }
@@ -185,9 +217,21 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// <param name="onFailure">The action to execute if the result is failed.</param>
     public void OnFailure(Action<Exception> onFailure)
     {
-        if (!IsSuccess)
+        if (Status != ResultState.Success)
         {
             onFailure(exception!);
+        }
+    }
+
+    /// <summary>
+    /// Executes the specified action if the result is failed.
+    /// </summary>
+    /// <param name="onFailure">The action to execute if the result is failed.</param>
+    public void OnFailure(Action<ResultState, Exception> onFailure)
+    {
+        if (Status != ResultState.Success)
+        {
+            onFailure(state, exception!);
         }
     }
 
@@ -196,7 +240,7 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
     /// </summary>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public T? Unwrap() => IsSuccess ? value : throw new ResultFailureException();
+    public T? Unwrap() => Status == ResultState.Success ? value : throw new ResultFailureException();
 
     /// <summary>
     /// Determines whether two <see cref="Result{T}"/> instances are equal.
@@ -272,12 +316,14 @@ public readonly struct Result<T> : IEquatable<Result<T>>, IComparable<Result<T>>
 /// </summary>
 public readonly struct Result : IEquatable<Result>
 {
+    private readonly ResultState state;
+
     private readonly Exception? exception;
 
     /// <summary>
     /// Gets a value indicating whether the result is successful.
     /// </summary>
-    public bool IsSuccess => exception is null;
+    public ResultState Status => state;
 
     /// <summary>
     /// Gets the exception of the result if it is a failure.
@@ -287,32 +333,35 @@ public readonly struct Result : IEquatable<Result>
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> struct with a successful state.
     /// </summary>
-    private Result(bool isSuccess)
+    public Result()
     {
         exception = null;
+        this.state = ResultState.Success;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> struct with a failure exception.
     /// </summary>
+    ///  <param name="state">The state of the failed result.</param>
     /// <param name="error">The exception of the failed result.</param>
-    private Result(Exception error)
+    private Result(ResultState state, Exception error)
     {
         exception = error;
+        this.state = state;
     }
 
     /// <summary>
     /// Creates a successful result.
     /// </summary>
     /// <returns>A successful <see cref="Result"/>.</returns>
-    public static Result Success() => new Result(true);
+    public static Result Success() => new Result();
 
     /// <summary>
     /// Creates a failed result.
     /// </summary>
     /// <param name="error">The exception of the failed result.</param>
     /// <returns>A failed <see cref="Result"/>.</returns>
-    public static Result Failure(Exception error) => new Result(error);
+    public static Result Failure(ResultState state, Exception error) => new Result(state, error);
 
     /// <summary>
     /// Executes one of the specified actions based on whether the result is successful or failed.
@@ -321,7 +370,7 @@ public readonly struct Result : IEquatable<Result>
     /// <param name="onFailure">The action to execute if the result is failed.</param>
     public void Match(Action onSuccess, Action<Exception> onFailure)
     {
-        if (IsSuccess)
+        if (Status == ResultState.Success)
         {
             onSuccess();
         }
@@ -332,12 +381,31 @@ public readonly struct Result : IEquatable<Result>
     }
 
     /// <summary>
+    /// Executes one of the specified actions based on whether the result is successful or failed.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute if the result is successful.</param>
+    /// <param name="onFailure">The action to execute if the result is failed.</param>
+    public void Match(Action onSuccess, Action<ResultState, Exception> onFailure)
+    {
+        if (Status == ResultState.Success)
+        {
+            onSuccess();
+        }
+        else
+        {
+            onFailure(state, exception!);
+        }
+    }
+
+
+
+    /// <summary>
     /// Executes the specified action if the result is successful.
     /// </summary>
     /// <param name="onSuccess">The action to execute if the result is successful.</param>
     public void OnSuccess(Action onSuccess)
     {
-        if (IsSuccess)
+        if (Status == ResultState.Success)
         {
             onSuccess();
         }
@@ -349,9 +417,21 @@ public readonly struct Result : IEquatable<Result>
     /// <param name="onFailure">The action to execute if the result is failed.</param>
     public void OnFailure(Action<Exception> onFailure)
     {
-        if (!IsSuccess)
+        if (Status != ResultState.Success)
         {
             onFailure(exception!);
+        }
+    }
+
+    /// <summary>
+    /// Executes the specified action if the result is failed.
+    /// </summary>
+    /// <param name="onFailure">The action to execute if the result is failed.</param>
+    public void OnFailure(Action<ResultState, Exception> onFailure)
+    {
+        if (Status != ResultState.Success)
+        {
+            onFailure(state, exception!);
         }
     }
 
@@ -362,11 +442,11 @@ public readonly struct Result : IEquatable<Result>
     /// <returns><c>true</c> if the two <see cref="Result"/> instances are equal; otherwise, <c>false</c>.</returns>
     public bool Equals(Result other)
     {
-        if (IsSuccess && other.IsSuccess)
+        if (Status == ResultState.Success && other.Status == ResultState.Success)
         {
             return true;
         }
-        if (!IsSuccess && !other.IsSuccess)
+        if (Status != ResultState.Success && other.Status != ResultState.Success)
         {
             return EqualityComparer<Exception>.Default.Equals(exception, other.exception);
         }

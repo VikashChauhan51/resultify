@@ -150,9 +150,24 @@ public class Outcome : IEqualityComparer<Outcome>
             onFailure(Status, Errors);
         }
     }
+    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
+    {
+        if (Status == OutcomeStatus.Success)
+        {
+            onSuccess();
+        }
+        else
+        {
+            onFailure(Errors);
+        }
+    }
     public TResult Match<TResult>(Func<TResult> onSuccess, Func<OutcomeStatus, IEnumerable<OutcomeError>, TResult> onFailure)
     {
         return Status == OutcomeStatus.Success ? onSuccess() : onFailure(Status, Errors!);
+    }
+    public TResult Match<TResult>(Func<TResult> onSuccess, Func<IEnumerable<OutcomeError>, TResult> onFailure)
+    {
+        return Status == OutcomeStatus.Success ? onSuccess() : onFailure(Errors!);
     }
     public bool Equals(Outcome? other)
     {
@@ -355,10 +370,21 @@ public class Outcome<T> : IEqualityComparer<Outcome<T>>
             onFailure(Status, Errors);
         }
     }
-
-    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<OutcomeStatus, IEnumerable<OutcomeError>, TResult> onFailure)
+    public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
     {
-        return Status == OutcomeStatus.Success ? onSuccess(Value!) : onFailure(Status, Errors);
+        if (Status == OutcomeStatus.Success)
+        {
+            onSuccess();
+        }
+        else
+        {
+            onFailure(Errors);
+        }
+    }
+
+    public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<IEnumerable<OutcomeError>, TResult> onFailure)
+    {
+        return Status == OutcomeStatus.Success ? onSuccess(Value!) : onFailure(Errors);
     }
 
     public bool Equals(Outcome<T>? other)

@@ -27,7 +27,7 @@ public class OutcomeTests
         var outcome = Outcome.Failure(errors);
 
         // Assert
-        Assert.False(outcome.Status != OutcomeStatus.Success);
+        Assert.True(outcome.Status != OutcomeStatus.Success);
         Assert.NotEmpty(outcome.Errors);
         Assert.Equivalent(errors, outcome.Errors);
     }
