@@ -13,7 +13,7 @@ public class OutcomeTests
         var outcome = Outcome.Success();
 
         // Assert
-        Assert.True(outcome.Status == OutcomeStatus.Success);
+        Assert.True(outcome.Status == ResultState.Success);
         Assert.Empty(outcome.Errors);
     }
 
@@ -27,20 +27,11 @@ public class OutcomeTests
         var outcome = Outcome.Failure(errors);
 
         // Assert
-        Assert.True(outcome.Status != OutcomeStatus.Success);
+        Assert.True(outcome.Status != ResultState.Success);
         Assert.NotEmpty(outcome.Errors);
         Assert.Equivalent(errors, outcome.Errors);
     }
 
-    [Fact]
-    public void Failure_WithEmptyErrors_ShouldThrowArgumentException()
-    {
-        // Act
-        Action act = () => Outcome.Failure(Array.Empty<OutcomeError>());
-
-        // Assert
-        Assert.Throws<ArgumentException>(act);
-    }
 
     [Fact]
     public void Match_ShouldInvokeCorrectCallback()

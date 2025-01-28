@@ -301,6 +301,73 @@ public static class Guard
         }
     }
 
+
+    /// <summary>
+    /// Throws an exception if a <see cref="condition"/> value is not true.
+    /// </summary>
+    /// <param name="condition"></param>
+    /// <param name="message"></param>
+    /// <param name="memberName"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static void ThrowIfInvalidOperation(bool condition, string message, [CallerMemberName] string memberName = "")
+    {
+        if (condition)
+        {
+            throw new InvalidOperationException($"{memberName}: {message}");
+        }
+    }
+
+    /// <summary>
+    /// Throws an exception if a <see cref="obj"/>  and <see cref="{T}"/> type not match.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="paramName"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public static void ThrowIfArgumentTypeMismatch<T>(object obj, string paramName)
+    {
+        if (obj is not T)
+        {
+            throw new ArgumentException($"The argument is not of the expected type {typeof(T).Name}.", paramName);
+        }
+    }
+
+
+    /// <summary>
+    /// Throws an exception if a <see cref="obj"/>  and <see cref="{T}"/> type not match.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="paramName"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public static void ThrowIfArgumentTypeMatch<T>([ValidatedNotNull][NoEnumeration] object obj, [CallerArgumentExpression(nameof(obj))] string paramName = "")
+    {
+        if (obj is T)
+        {
+            throw new InvalidOperationException($"Cannot use an {typeof(T).Name} as a value.");
+        }
+    }
+
+    public static void ThrowIfArgumentContainsScripts(string value, [CallerArgumentExpression(nameof(value))] string paramName = "")
+    {
+        const string scriptPattern = @"<.*?>|&.*?;";
+        if (Regex.IsMatch(value, scriptPattern, RegexOptions.IgnoreCase))
+        {
+            throw new ArgumentException("The value contains potentially dangerous scripts.", paramName);
+        }
+    }
+
+    public static void ThrowIfArgumentContainsInjection(string value, [CallerArgumentExpression(nameof(value))] string paramName = "")
+    {
+        const string sqlInjectionPattern = @"[\'\""]";
+        if (Regex.IsMatch(value, sqlInjectionPattern, RegexOptions.IgnoreCase))
+        {
+            throw new ArgumentException("The value contains potentially dangerous characters for SQL injection.", paramName);
+        }
+    }
+
+
+
     /// <summary>
     /// Workaround to make dotnet_code_quality.null_check_validation_methods work
     /// https://github.com/dotnet/roslyn-analyzers/issues/3451#issuecomment-606690452

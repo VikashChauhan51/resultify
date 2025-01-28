@@ -34,7 +34,7 @@ public class ResultExtensionsTests
     public void Map_ReturnsFailureResult_WhenOriginalResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(ResultState.Failure, exception);
+        var result = Result<int>.WithError(ResultState.Failure, exception);
 
         var mappedResult = result.Map(x => x.ToString());
 
@@ -59,7 +59,7 @@ public class ResultExtensionsTests
     public void Bind_ReturnsOriginalFailureResult_WhenFirstResultIsFailed()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(ResultState.Failure,exception);
+        var result = Result<int>.WithError(ResultState.Failure,exception);
 
         var chainedResult = result.Bind(x => Result<string>.Success($"Value: {x}"));
 
@@ -74,7 +74,7 @@ public class ResultExtensionsTests
         var result = Result<int>.Success(42);
         var chainedException = new InvalidOperationException("Chained error");
 
-        var chainedResult = result.Bind(x => Result<string>.Failure(ResultState.Failure, chainedException));
+        var chainedResult = result.Bind(x => Result<string>.WithError(ResultState.Failure, chainedException));
 
         Assert.False(chainedResult.Status == ResultState.Success);
         Assert.Equal(chainedException, chainedResult.Exception);
@@ -100,7 +100,7 @@ public class ResultExtensionsTests
     public void Tap_DoesNotExecuteActionForFailureResult()
     {
         var exception = new InvalidOperationException("Test error");
-        var result = Result<int>.Failure(ResultState.Failure, exception);
+        var result = Result<int>.WithError(ResultState.Failure, exception);
         var tappedValue = 0;
 
         var returnedResult = result.Tap(x =>

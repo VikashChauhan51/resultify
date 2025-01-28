@@ -15,7 +15,7 @@ public class OutcomeTTests
         var outcome = Outcome<string>.Success(value);
 
         // Assert
-        Assert.True(outcome.Status == OutcomeStatus.Success);
+        Assert.True(outcome.Status == ResultState.Success);
         Assert.Equal(value, outcome.Value);
         Assert.Empty(outcome.Errors);
     }
@@ -40,7 +40,7 @@ public class OutcomeTTests
         var outcome = Outcome<string>.Failure(errors);
 
         // Assert
-        Assert.True(outcome.Status!=OutcomeStatus.Success);
+        Assert.True(outcome.Status!= ResultState.Success);
         Assert.Equivalent(errors, outcome.Errors);
         Assert.Null(outcome.Value);
     }
