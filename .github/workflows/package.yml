@@ -25,6 +25,9 @@ jobs:
     - name: Pack ResultifyCore
       run: dotnet pack Resultify/ResultifyCore.csproj --configuration Release --no-build --output nupkgs
       working-directory: src
+    - name: Pack ResultifyCore.AspNetCore
+      run: dotnet pack ResultifyCore.AspNetCore/ResultifyCore.AspNetCore.csproj --configuration Release --no-build --output nupkgs
+      working-directory: src
     - name: Publish
       run: dotnet nuget push nupkgs/*.nupkg --api-key ${{ secrets.NUGET_APIKEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       working-directory: src

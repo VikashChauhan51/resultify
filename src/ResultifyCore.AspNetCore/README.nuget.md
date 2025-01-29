@@ -1,34 +1,11 @@
-
+﻿
 # ResultifyCore
 
-**ResultifyCore** is a .NET library providing `Result`, `Option`, `Outcome`, `OneOf` and `Guard` patterns to simplify error handling, optional values, and type discrimination. It includes extension methods for fluent API support and enhanced readability.
+**ResultifyCore** is a .NET library providing `Result`, `Option`, `Outcome`, and `OneOf` patterns to simplify error handling, optional values, and type discrimination. It includes extension methods for fluent API support and enhanced readability.
 
 ## Installation
 
 You can install the ResultifyCore package via NuGet:
-
-[![NuGet Version](https://img.shields.io/nuget/v/ResultifyCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/ResultifyCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore/)
-[![Build Status](https://github.com/VikashChauhan51/resultify/actions/workflows/build.yml/badge.svg)](https://github.com/VikashChauhan51/resultify/actions)
-[![License](https://img.shields.io/github/license/VikashChauhan51/resultify.svg?style=flat-square)](https://github.com/VikashChauhan51/resultify/blob/main/LICENSE)
-
-
-```shell
-dotnet add package ResultifyCore
-```
-
-Or you can use the NuGet Package Manager:
-
-```shell
-Install-Package ResultifyCore
-```
-
-You can install the ResultifyCore.AspNetCore package via NuGet:
-
-[![NuGet Version](https://img.shields.io/nuget/v/ResultifyCore.AspNetCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore.AspNetCore/)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/ResultifyCore.AspNetCore.svg?style=flat-square)](https://www.nuget.org/packages/ResultifyCore/)
-[![Build Status](https://github.com/VikashChauhan51/resultify/actions/workflows/build.yml/badge.svg)](https://github.com/VikashChauhan51/resultify/actions)
-[![License](https://img.shields.io/github/license/VikashChauhan51/resultify.svg?style=flat-square)](https://github.com/VikashChauhan51/resultify/blob/main/LICENSE)
 
 ```shell
 dotnet add package ResultifyCore.AspNetCore
@@ -216,26 +193,6 @@ result.Match(
     onFailure: errors => Console.WriteLine($"Failed to parse number: {string.Join(", ", errors)}")
 );
 ```
-### Guard Pattern
-
-The Guard pattern helps enforce preconditions in your code by validating arguments.
- It ensures your methods receive valid input and fail early with meaningful exceptions when they don't.
-
- #### Example of Guard Usage
-
- ```csharp
-public class Calculator
-{
-    public static int Divide(int dividend, int divisor)
-    {
-        // Validate arguments using Guard
-        Guard.ThrowIfArgumentIsNegative(dividend, nameof(dividend));
-        Guard.ThrowIfArgumentIsNegativeOrZero(divisor, nameof(divisor));
-
-        return dividend / divisor;
-    }
-}
- ```
 
 ### Extensions
 
