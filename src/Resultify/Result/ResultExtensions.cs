@@ -42,6 +42,231 @@ public static class ResultExtensions
     }
 
     /// <summary>
+    /// Creates a result indicating a conflict with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the conflict result.</param>
+    /// <returns>A <see cref="Result"/> representing a conflict with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Conflict results must be initialized with a valid exception.</exception>
+    public static Result Conflict(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Conflict, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a conflict with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in conflict results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the conflict result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a conflict with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Conflict results must be initialized with a valid exception.</exception>
+    public static Result<T> Conflict<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Conflict, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a problem with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the problem result.</param>
+    /// <returns>A <see cref="Result"/> representing a problem with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Problem results must be initialized with a valid exception.</exception>
+    public static Result Problem(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Problem, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a problem with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in problem results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the problem result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a problem with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Problem results must be initialized with a valid exception.</exception>
+    public static Result<T> Problem<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Problem, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a validation error with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the validation result.</param>
+    /// <returns>A <see cref="Result"/> representing a validation error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Validation results must be initialized with a valid exception.</exception>
+    public static Result Validation(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Validation, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a validation error with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in validation results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the validation result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a validation error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Validation results must be initialized with a valid exception.</exception>
+    public static Result<T> Validation<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Validation, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the requested resource was not found with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the not found result.</param>
+    /// <returns>A <see cref="Result"/> representing a not found error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Not found results must be initialized with a valid exception.</exception>
+    public static Result NotFound(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.NotFound, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the requested resource was not found with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in not found results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the not found result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a not found error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Not found results must be initialized with a valid exception.</exception>
+    public static Result<T> NotFound<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.NotFound, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the operation is unauthorized with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the unauthorized result.</param>
+    /// <returns>A <see cref="Result"/> representing an unauthorized error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Unauthorized results must be initialized with a valid exception.</exception>
+    public static Result Unauthorized(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Unauthorized, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the operation is unauthorized with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in unauthorized results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the unauthorized result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing an unauthorized error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Unauthorized results must be initialized with a valid exception.</exception>
+    public static Result<T> Unauthorized<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Unauthorized, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that access to the resource is forbidden with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the forbidden result.</param>
+    /// <returns>A <see cref="Result"/> representing a forbidden error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Forbidden results must be initialized with a valid exception.</exception>
+    public static Result Forbidden(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Forbidden, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that access to the resource is forbidden with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in forbidden results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the forbidden result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a forbidden error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Forbidden results must be initialized with a valid exception.</exception>
+    public static Result<T> Forbidden<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Forbidden, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the resource is currently unavailable with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the unavailable result.</param>
+    /// <returns>A <see cref="Result"/> representing an unavailable error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Unavailable results must be initialized with a valid exception.</exception>
+    public static Result Unavailable(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.Unavailable, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating that the resource is currently unavailable with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in unavailable results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the unavailable result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing an unavailable error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Unavailable results must be initialized with a valid exception.</exception>
+    public static Result<T> Unavailable<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.Unavailable, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a critical error with the specified exception.
+    /// </summary>
+    /// <param name="exception">The exception to be encapsulated in the critical error result.</param>
+    /// <returns>A <see cref="Result"/> representing a critical error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Critical error results must be initialized with a valid exception.</exception>
+    public static Result CriticalError(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return Result.Failure(ResultState.CriticalError, exception);
+    }
+
+    /// <summary>
+    /// Creates a result indicating a critical error with the specified exception.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result. This is not used in critical error results.</typeparam>
+    /// <param name="exception">The exception to be encapsulated in the critical error result.</param>
+    /// <returns>A <see cref="Result{T}"/> representing a critical error with the specified exception.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// Critical error results must be initialized with a valid exception.</exception>
+    public static Result<T> CriticalError<T>(this Exception exception)
+    {
+        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        return new Result<T>(ResultState.CriticalError, exception);
+    }
+
+    /// <summary>
+    /// Determines whether the specified result state indicates success.
+    /// </summary>
+    /// <param name="status">The result state to check.</param>
+    /// <returns><c>true</c> if the specified result state indicates success; otherwise, <c>false</c>.</returns>
+    public static bool IsSuccess(this ResultState status)
+    {
+        return status == ResultState.Success || status == ResultState.NoContent || status == ResultState.Created;
+    }
+    /// <summary>
     /// Executes a side-effect action without altering the result.
     /// </summary>
     /// <typeparam name="T">The type of the value.</typeparam>
@@ -70,6 +295,15 @@ public static class ResultExtensions
         Guard.ThrowIfArgumentTypeMatch<Exception>(value!);
         return new Result<T>(value);
     }
+
+    /// <summary>
+    /// Creates a successful result containing the specified value.
+    /// </summary>
+    /// <typeparam name="T">The type of the value contained in the result.</typeparam>
+    /// <param name="value">The value to be encapsulated in the successful result.</param>
+    /// <returns>A <see cref="Result{T}"/> containing the specified value.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>. 
+    /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
     public static Result<T> Created<T>(this T value)
     {
         Guard.ThrowIfArgumentTypeMatch<Exception>(value!);
@@ -101,90 +335,6 @@ public static class ResultExtensions
     {
         Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
         return new Result<T>(ResultState.Failure, exception);
-    }
-    public static Result Conflict(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Conflict, exception);
-    }
-    public static Result<T> Conflict<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Conflict, exception);
-    }
-    public static Result Problem(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Problem, exception);
-    }
-    public static Result<T> Problem<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Problem, exception);
-    }
-    public static Result Validation(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Validation, exception);
-    }
-    public static Result<T> Validation<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Validation, exception);
-    }
-    public static Result NotFound(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.NotFound, exception);
-    }
-    public static Result<T> NotFound<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.NotFound, exception);
-    }
-    public static Result Unauthorized(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Unauthorized, exception);
-    }
-    public static Result<T> Unauthorized<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Unauthorized, exception);
-    }
-    public static Result Forbidden(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Forbidden, exception);
-    }
-    public static Result<T> Forbidden<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Forbidden, exception);
-    }
-    public static Result Unavailable(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.Unavailable, exception);
-    }
-    public static Result<T> Unavailable<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.Unavailable, exception);
-    }
-    public static Result CriticalError(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return Result.Failure(ResultState.CriticalError, exception);
-    }
-    public static Result<T> CriticalError<T>(this Exception exception)
-    {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
-        return new Result<T>(ResultState.CriticalError, exception);
-    }
-    public static bool IsSuccess(this ResultState status)
-    {
-        return status == ResultState.Success || status == ResultState.NoContent || status == ResultState.Created;
     }
 }
 

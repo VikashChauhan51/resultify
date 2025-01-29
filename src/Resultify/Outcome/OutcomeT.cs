@@ -2,16 +2,42 @@
 
 namespace ResultifyCore;
 
+
+/// <summary>
+/// Represents the outcome of an operation, including its status, value, and any errors.
+/// </summary>
+/// <typeparam name="T">The type of the value associated with the outcome.</typeparam>
 public class Outcome<T> : IEquatable<Outcome<T>>
 {
+    /// <summary>
+    /// Gets the status of the outcome.
+    /// </summary>
     public ResultState Status { get; }
+
+    /// <summary>
+    /// Gets the value associated with the outcome.
+    /// </summary>
     public T? Value { get; }
+
+    /// <summary>
+    /// Gets the collection of errors associated with the outcome.
+    /// </summary>
     public IEnumerable<OutcomeError> Errors { get; } = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Outcome{T}"/> class with a successful result.
+    /// </summary>
+    /// <param name="value">The value associated with the successful outcome.</param>
 
     public Outcome(T value) : this(ResultState.Success, value, [])
     {
     }
 
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Outcome{T}"/> class with a failure result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the failed outcome.</param>
     public Outcome(IEnumerable<OutcomeError> errors) : this(ResultState.Failure, default!, errors)
     {
     }
@@ -23,6 +49,13 @@ public class Outcome<T> : IEquatable<Outcome<T>>
         Errors = errors ?? [];
     }
 
+
+    /// <summary>
+    /// Creates a successful outcome with the specified value.
+    /// </summary>
+    /// <param name="value">The value associated with the successful outcome.</param>
+    /// <returns>A successful <see cref="Outcome{T}"/> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the value is null.</exception>
     public static Outcome<T> Success(T value)
     {
         if (value == null)
@@ -32,6 +65,13 @@ public class Outcome<T> : IEquatable<Outcome<T>>
 
         return new Outcome<T>(ResultState.Success, value, []);
     }
+
+    /// <summary>
+    /// Creates a created outcome with the specified value.
+    /// </summary>
+    /// <param name="value">The value associated with the created outcome.</param>
+    /// <returns>A created <see cref="Outcome{T}"/> instance.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the value is null.</exception>
     public static Outcome<T> Created(T value)
     {
         if (value == null)
@@ -41,10 +81,22 @@ public class Outcome<T> : IEquatable<Outcome<T>>
 
         return new Outcome<T>(ResultState.Created, value, []);
     }
+
+    /// <summary>
+    /// Creates a failure outcome with the specified errors.
+    /// </summary>
+    /// <param name="errors">The errors associated with the failed outcome.</param>
+    /// <returns>A failed <see cref="Outcome{T}"/> instance.</returns>
     public static Outcome<T> Failure(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.Failure, default!, errors);
     }
+
+    /// <summary>
+    /// Creates a failure outcome with the specified errors.
+    /// </summary>
+    /// <param name="errors">The errors associated with the failed outcome.</param>
+    /// <returns>A failed <see cref="Outcome{T}"/> instance.</returns>
     public static Outcome<T> Failure(IEnumerable<OutcomeError> errors)
     {
 
@@ -122,6 +174,12 @@ public class Outcome<T> : IEquatable<Outcome<T>>
     {
         return new Outcome<T>(ResultState.Forbidden, default!, errors);
     }
+
+    /// <summary>
+    /// Unwraps the value of a successful outcome.
+    /// </summary>
+    /// <returns>The value associated with the successful outcome.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the outcome is not successful.</exception>
     public T Unwrap()
     {
         if (!IsSuccess())
@@ -132,6 +190,11 @@ public class Outcome<T> : IEquatable<Outcome<T>>
         return Value!;
     }
 
+    /// <summary>
+    /// Matches the outcome and executes the appropriate action based on its status.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute if the outcome is successful.</param>
+    /// <param name="onFailure">The action to execute if the outcome is a failure.</param>
     public void Match(Action onSuccess, Action<ResultState, IEnumerable<OutcomeError>> onFailure)
     {
         if (IsSuccess())
@@ -143,6 +206,12 @@ public class Outcome<T> : IEquatable<Outcome<T>>
             onFailure(Status, Errors);
         }
     }
+
+    /// <summary>
+    /// Matches the outcome and executes the appropriate action based on its status.
+    /// </summary>
+    /// <param name="onSuccess">The action to execute if the outcome is successful.</param>
+    /// <param name="onFailure">The action to execute if the outcome is a failure.</param>
     public void Match(Action onSuccess, Action<IEnumerable<OutcomeError>> onFailure)
     {
         if (IsSuccess())
@@ -155,16 +224,37 @@ public class Outcome<T> : IEquatable<Outcome<T>>
         }
     }
 
+
+    /// <summary>
+    /// Matches the outcome and returns the appropriate result based on its status.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
+    /// <param name="onSuccess">The function to execute if the outcome is successful.</param>
+    /// <param name="onFailure">The function to execute if the outcome is a failure.</param>
+    /// <returns>The result of the appropriate function based on the outcome's status.</returns>
     public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<IEnumerable<OutcomeError>, TResult> onFailure)
     {
         return IsSuccess() ? onSuccess(Value!) : onFailure(Errors);
     }
 
+
+    /// <summary>
+    /// Matches the outcome and returns the appropriate result based on its status.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
+    /// <param name="onSuccess">The function to execute if the outcome is successful.</param>
+    /// <param name="onFailure">The function to execute if the outcome is a failure.</param>
+    /// <returns>The result of the appropriate function based on the outcome's status.</returns>
     public TResult Match<TResult>(Func<T, TResult> onSuccess, Func<ResultState, IEnumerable<OutcomeError>, TResult> onFailure)
     {
         return IsSuccess() ? onSuccess(Value!) : onFailure(Status, Errors);
     }
 
+    /// <summary>
+    /// Determines whether the specified <see cref="Outcome{T}"/> is equal to the current <see cref="Outcome{T}"/>.
+    /// </summary>
+    /// <param name="other">The <see cref="Outcome{T}"/> to compare with the current <see cref="Outcome{T}"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="Outcome{T}"/> is equal to the current <see cref="Outcome{T}"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(Outcome<T>? other)
     {
         if (other is null) return false;
@@ -190,8 +280,18 @@ public class Outcome<T> : IEquatable<Outcome<T>>
                Errors.SequenceEqual(other.Errors);
     }
 
+    /// <summary>
+    /// Determines whether the specified object is equal to the current <see cref="Outcome{T}"/>.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current <see cref="Outcome{T}"/>.</param>
+    /// <returns><c>true</c> if the specified object is equal to the current <see cref="Outcome{T}"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object? obj) => obj is Outcome<T> other && Equals(other);
 
+
+    /// <summary>
+    /// Serves as the default hash function.
+    /// </summary>
+    /// <returns>A hash code for the current <see cref="Outcome{T}"/>.</returns>
     public override int GetHashCode()
     {
         var hash = new HashCode();
@@ -204,12 +304,25 @@ public class Outcome<T> : IEquatable<Outcome<T>>
         return hash.ToHashCode();
     }
 
+
+    /// <summary>
+    /// Determines whether two <see cref="Outcome{T}"/> instances are equal.
+    /// </summary>
+    /// <param name="x">The first <see cref="Outcome{T}"/> to compare.</param>
+    /// <param name="y">The second <see cref="Outcome{T}"/> to compare.</param>
+    /// <returns><c>true</c> if the two <see cref="Outcome{T}"/> instances are equal; otherwise, <c>false</c>.</returns>
     public bool Equals(Outcome<T>? x, Outcome<T>? y)
     {
         if (x is null || y is null) return false;
         return x.Equals(y);
     }
 
+
+    /// <summary>
+    /// Returns a hash code for the specified <see cref="Outcome{T}"/>.
+    /// </summary>
+    /// <param name="obj">The <see cref="Outcome{T}"/> for which a hash code is to be returned.</param>
+    /// <returns>A hash code for the specified <see cref="Outcome{T}"/>.</returns>
     public int GetHashCode([DisallowNull] Outcome<T> obj)
     {
         return obj.GetHashCode();

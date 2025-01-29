@@ -5,8 +5,19 @@ using System.Text.Json;
 
 namespace ResultifyCore.AspNetCore;
 
+/// <summary>
+/// Provides extension methods for converting <see cref="Outcome"/> and <see cref="Result"/> objects to <see cref="IActionResult"/> and <see cref="IResult"/>.
+/// </summary>
 public static class ResultExtensions
 {
+    /// <summary>
+    /// Converts an <see cref="Outcome{T}"/> to an <see cref="IActionResult"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="result">The outcome result.</param>
+    /// <param name="controller">The controller instance.</param>
+    /// <param name="url">The URL for the created result.</param>
+    /// <returns>An <see cref="IActionResult"/> representing the outcome.</returns>
     public static IActionResult ToActionResult<T>(this Outcome<T> result, ControllerBase controller, string? url = null)
     {
         return result.Status switch
@@ -26,6 +37,13 @@ public static class ResultExtensions
             _ => controller.UnprocessableEntity(result.Errors.SerializeErrors())
         };
     }
+
+    /// <summary>
+    /// Converts an <see cref="Outcome"/> to an <see cref="IActionResult"/>.
+    /// </summary>
+    /// <param name="result">The outcome result.</param>
+    /// <param name="controller">The controller instance.</param>
+    /// <returns>An <see cref="IActionResult"/> representing the outcome.</returns>
     public static IActionResult ToActionResult(this Outcome result, ControllerBase controller)
     {
         return result.Status switch
@@ -45,6 +63,15 @@ public static class ResultExtensions
             _ => controller.UnprocessableEntity(result.Errors.SerializeErrors())
         };
     }
+
+    /// <summary>
+    /// Converts a <see cref="Result{T}"/> to an <see cref="IActionResult"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="result">The result.</param>
+    /// <param name="controller">The controller instance.</param>
+    /// <param name="url">The URL for the created result.</param>
+    /// <returns>An <see cref="IActionResult"/> representing the result.</returns>
     public static IActionResult ToActionResult<T>(this Result<T> result, ControllerBase controller, string? url = null)
     {
         return result.Status switch
@@ -64,6 +91,13 @@ public static class ResultExtensions
             _ => controller.UnprocessableEntity(result.Value)
         };
     }
+
+    /// <summary>
+    /// Converts a <see cref="Result"/> to an <see cref="IActionResult"/>.
+    /// </summary>
+    /// <param name="result">The result.</param>
+    /// <param name="controller">The controller instance.</param>
+    /// <returns>An <see cref="IActionResult"/> representing the result.</returns>
     public static IActionResult ToActionResult(this Result result, ControllerBase controller)
     {
         return result.Status switch
@@ -83,6 +117,14 @@ public static class ResultExtensions
             _ => controller.UnprocessableEntity(result.Exception)
         };
     }
+
+    /// <summary>
+    /// Converts an <see cref="Outcome{T}"/> to an <see cref="IResult"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="result">The outcome result.</param>
+    /// <param name="url">The URL for the created result.</param>
+    /// <returns>An <see cref="IResult"/> representing the outcome.</returns>
     public static IResult ToResult<T>(this Outcome<T> result, string? url = null)
     {
         return result.Status switch
@@ -117,6 +159,12 @@ public static class ResultExtensions
             _ => Results.UnprocessableEntity(result.Errors.SerializeErrors())
         };
     }
+
+    /// <summary>
+    /// Converts an <see cref="Outcome"/> to an <see cref="IResult"/>.
+    /// </summary>
+    /// <param name="result">The outcome result.</param>
+    /// <returns>An <see cref="IResult"/> representing the outcome.</returns>
     public static IResult ToResult(this Outcome result)
     {
         return result.Status switch
@@ -151,6 +199,14 @@ public static class ResultExtensions
             _ => Results.UnprocessableEntity(result.Errors.SerializeErrors())
         };
     }
+
+    /// <summary>
+    /// Converts a <see cref="Result{T}"/> to an <see cref="IResult"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    /// <param name="result">The result.</param>
+    /// <param name="url">The URL for the created result.</param>
+    /// <returns>An <see cref="IResult"/> representing the result.</returns>
     public static IResult ToResult<T>(this Result<T> result, string? url = null)
     {
         return result.Status switch
@@ -185,6 +241,12 @@ public static class ResultExtensions
             _ => Results.UnprocessableEntity(result.Value)
         };
     }
+
+    /// <summary>
+    /// Converts a <see cref="Result"/> to an <see cref="IResult"/>.
+    /// </summary>
+    /// <param name="result">The result.</param>
+    /// <returns>An <see cref="IResult"/> representing the result.</returns>
     public static IResult ToResult(this Result result)
     {
         return result.Status switch
@@ -219,6 +281,12 @@ public static class ResultExtensions
             _ => Results.UnprocessableEntity(result.Exception)
         };
     }
+
+    /// <summary>
+    /// Serializes a collection of <see cref="OutcomeError"/> to a JSON string.
+    /// </summary>
+    /// <param name="errors">The collection of errors.</param>
+    /// <returns>A JSON string representing the errors.</returns>
     public static string SerializeErrors(this IEnumerable<OutcomeError> errors)
     {
         if (errors == null || !errors.Any())
@@ -230,7 +298,6 @@ public static class ResultExtensions
 
     private static IActionResult UnAuthorized(ControllerBase controller, IEnumerable<OutcomeError> errors)
     {
-
         if (errors != null && errors.Any())
         {
             return controller.Problem(errors.SerializeErrors(), statusCode: StatusCodes.Status401Unauthorized, title: "Unauthorized.");
@@ -240,12 +307,11 @@ public static class ResultExtensions
             return controller.Unauthorized();
         }
     }
+
     private static IResult UnAuthorized(IEnumerable<OutcomeError> errors)
     {
-
         if (errors != null && errors.Any())
         {
-
             return Results.Problem(new ProblemDetails
             {
                 Title = "Unauthorized.",
@@ -258,9 +324,9 @@ public static class ResultExtensions
             return Results.Unauthorized();
         }
     }
+
     private static IActionResult UnAuthorized(ControllerBase controller, Exception? error)
     {
-
         if (error != null)
         {
             return controller.Problem(error.Message, statusCode: StatusCodes.Status401Unauthorized, title: "Unauthorized.");
@@ -270,9 +336,9 @@ public static class ResultExtensions
             return controller.Unauthorized();
         }
     }
+
     private static IResult UnAuthorized(Exception? error)
     {
-
         if (error != null)
         {
             return Results.Problem(new ProblemDetails
@@ -287,9 +353,9 @@ public static class ResultExtensions
             return Results.Unauthorized();
         }
     }
+
     private static IActionResult Forbidden(ControllerBase controller, IEnumerable<OutcomeError> errors)
     {
-
         if (errors != null && errors.Any())
         {
             return controller.Problem(errors.SerializeErrors(), statusCode: StatusCodes.Status403Forbidden, title: "Forbidden.");
@@ -299,9 +365,9 @@ public static class ResultExtensions
             return controller.Forbid();
         }
     }
+
     private static IResult Forbidden(IEnumerable<OutcomeError> errors)
     {
-
         if (errors != null && errors.Any())
         {
             return Results.Problem(new ProblemDetails
@@ -316,9 +382,9 @@ public static class ResultExtensions
             return Results.Forbid();
         }
     }
+
     private static IActionResult Forbidden(ControllerBase controller, Exception? error)
     {
-
         if (error != null)
         {
             return controller.Problem(error.Message, statusCode: StatusCodes.Status403Forbidden, title: "Forbidden.");
@@ -328,9 +394,9 @@ public static class ResultExtensions
             return controller.Forbid();
         }
     }
+
     private static IResult Forbidden(Exception? error)
     {
-
         if (error != null)
         {
             return Results.Problem(new ProblemDetails
@@ -345,5 +411,4 @@ public static class ResultExtensions
             return Results.Forbid();
         }
     }
-
 }
