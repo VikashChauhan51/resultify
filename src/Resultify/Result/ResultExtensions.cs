@@ -50,7 +50,7 @@ public static class ResultExtensions
     /// Conflict results must be initialized with a valid exception.</exception>
     public static Result Conflict(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Conflict, exception);
     }
 
@@ -64,7 +64,7 @@ public static class ResultExtensions
     /// Conflict results must be initialized with a valid exception.</exception>
     public static Result<T> Conflict<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Conflict, exception);
     }
 
@@ -77,7 +77,7 @@ public static class ResultExtensions
     /// Problem results must be initialized with a valid exception.</exception>
     public static Result Problem(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Problem, exception);
     }
 
@@ -91,7 +91,7 @@ public static class ResultExtensions
     /// Problem results must be initialized with a valid exception.</exception>
     public static Result<T> Problem<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Problem, exception);
     }
 
@@ -104,7 +104,7 @@ public static class ResultExtensions
     /// Validation results must be initialized with a valid exception.</exception>
     public static Result Validation(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Validation, exception);
     }
 
@@ -118,7 +118,7 @@ public static class ResultExtensions
     /// Validation results must be initialized with a valid exception.</exception>
     public static Result<T> Validation<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Validation, exception);
     }
 
@@ -129,9 +129,9 @@ public static class ResultExtensions
     /// <returns>A <see cref="Result"/> representing a not found error with the specified exception.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
     /// Not found results must be initialized with a valid exception.</exception>
-    public static Result NotFound(this Exception exception)
+    public static Result NotFound(this Exception exception) 
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.NotFound, exception);
     }
 
@@ -145,7 +145,7 @@ public static class ResultExtensions
     /// Not found results must be initialized with a valid exception.</exception>
     public static Result<T> NotFound<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.NotFound, exception);
     }
 
@@ -158,7 +158,7 @@ public static class ResultExtensions
     /// Unauthorized results must be initialized with a valid exception.</exception>
     public static Result Unauthorized(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Unauthorized, exception);
     }
 
@@ -172,7 +172,7 @@ public static class ResultExtensions
     /// Unauthorized results must be initialized with a valid exception.</exception>
     public static Result<T> Unauthorized<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Unauthorized, exception);
     }
 
@@ -185,7 +185,7 @@ public static class ResultExtensions
     /// Forbidden results must be initialized with a valid exception.</exception>
     public static Result Forbidden(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Forbidden, exception);
     }
 
@@ -199,7 +199,7 @@ public static class ResultExtensions
     /// Forbidden results must be initialized with a valid exception.</exception>
     public static Result<T> Forbidden<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Forbidden, exception);
     }
 
@@ -212,7 +212,7 @@ public static class ResultExtensions
     /// Unavailable results must be initialized with a valid exception.</exception>
     public static Result Unavailable(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Unavailable, exception);
     }
 
@@ -226,7 +226,7 @@ public static class ResultExtensions
     /// Unavailable results must be initialized with a valid exception.</exception>
     public static Result<T> Unavailable<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Unavailable, exception);
     }
 
@@ -239,7 +239,7 @@ public static class ResultExtensions
     /// Critical error results must be initialized with a valid exception.</exception>
     public static Result CriticalError(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.CriticalError, exception);
     }
 
@@ -253,7 +253,7 @@ public static class ResultExtensions
     /// Critical error results must be initialized with a valid exception.</exception>
     public static Result<T> CriticalError<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.CriticalError, exception);
     }
 
@@ -292,7 +292,7 @@ public static class ResultExtensions
     /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
     public static Result<T> Success<T>(this T value)
     {
-        Guard.ThrowIfArgumentTypeMatch<Exception>(value!);
+        Guard.Against.ArgumentTypeMatch<Exception>(value!);
         return new Result<T>(value);
     }
 
@@ -306,7 +306,7 @@ public static class ResultExtensions
     /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
     public static Result<T> Created<T>(this T value)
     {
-        Guard.ThrowIfArgumentTypeMatch<Exception>(value!);
+        Guard.Against.ArgumentTypeMatch<Exception>(value!);
         return new Result<T>(ResultState.Created, value);
     }
 
@@ -319,7 +319,7 @@ public static class ResultExtensions
     /// Failure results must be initialized with a valid exception.</exception>
     public static Result Failure(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.Failure, exception);
     }
 
@@ -333,7 +333,7 @@ public static class ResultExtensions
     /// Failure results must be initialized with a valid exception.</exception>
     public static Result<T> Failure<T>(this Exception exception)
     {
-        Guard.ThrowIfArgumentIsNull(exception, nameof(exception), "Exception cannot be null.");
+        Guard.Against.Null(exception, nameof(exception));
         return new Result<T>(ResultState.Failure, exception);
     }
 }

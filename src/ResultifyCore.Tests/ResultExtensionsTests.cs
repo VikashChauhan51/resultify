@@ -134,7 +134,7 @@ public class ResultExtensionsTests
 
         // Act & Assert
         var exception = Assert.Throws<InvalidOperationException>(() => value.Success());
-        Assert.Equal("Cannot use an Exception as a value.", exception.Message);
+        Assert.Equal($"Cannot use an Exception as a value in value.", exception.Message);
     }
 
     [Fact]

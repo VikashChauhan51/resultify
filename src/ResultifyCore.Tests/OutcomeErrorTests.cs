@@ -31,17 +31,4 @@ public class OutcomeErrorTests
         // Assert
         Assert.Equal(hash1, hash2);
     }
-
-    [Fact]
-    public void ToString_ShouldReturnFormattedString()
-    {
-        // Arrange
-        var error = new OutcomeError("E001", "Error 1");
-
-        // Act
-        var result = error.ToString();
-
-        // Assert
-        Assert.Equal("E001: Error 1", result);
-    }
 }

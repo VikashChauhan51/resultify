@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<VersionPrefix>1.1.1.0</VersionPrefix>
+		<VersionPrefix>1.2.0.0</VersionPrefix>
 		<PackageId>ResultifyCore</PackageId>
 		<Title>ResultifyCore</Title>
 		<Authors>Vikash Chauhan</Authors>
@@ -31,7 +31,12 @@
 		<SignAssembly>true</SignAssembly>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageReadmeFile>README.nuget.md</PackageReadmeFile>
+		<ApplicationIcon>resultifycore.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="resultifycore.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="..\ResultifyCore.snk">
