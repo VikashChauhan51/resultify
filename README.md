@@ -1,6 +1,9 @@
 
 # ResultifyCore
 
+![ResultifyCore](resultifycore.ico)
+
+
 **ResultifyCore** is a .NET library providing `Result`, `Option`, `Outcome`, `OneOf` and `Guard` patterns to simplify error handling, optional values, and type discrimination. It includes extension methods for fluent API support and enhanced readability.
 
 ## Installation
