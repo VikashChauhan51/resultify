@@ -46,7 +46,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the conflict result.</param>
     /// <returns>A <see cref="Result"/> representing a conflict with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Conflict results must be initialized with a valid exception.</exception>
     public static Result Conflict(this Exception exception)
     {
@@ -60,7 +60,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in conflict results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the conflict result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a conflict with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Conflict results must be initialized with a valid exception.</exception>
     public static Result<T> Conflict<T>(this Exception exception)
     {
@@ -73,7 +73,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the problem result.</param>
     /// <returns>A <see cref="Result"/> representing a problem with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Problem results must be initialized with a valid exception.</exception>
     public static Result Problem(this Exception exception)
     {
@@ -87,7 +87,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in problem results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the problem result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a problem with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Problem results must be initialized with a valid exception.</exception>
     public static Result<T> Problem<T>(this Exception exception)
     {
@@ -100,7 +100,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the validation result.</param>
     /// <returns>A <see cref="Result"/> representing a validation error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Validation results must be initialized with a valid exception.</exception>
     public static Result Validation(this Exception exception)
     {
@@ -114,7 +114,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in validation results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the validation result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a validation error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Validation results must be initialized with a valid exception.</exception>
     public static Result<T> Validation<T>(this Exception exception)
     {
@@ -127,9 +127,9 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the not found result.</param>
     /// <returns>A <see cref="Result"/> representing a not found error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Not found results must be initialized with a valid exception.</exception>
-    public static Result NotFound(this Exception exception) 
+    public static Result NotFound(this Exception exception)
     {
         Guard.Against.Null(exception, nameof(exception));
         return Result.Failure(ResultState.NotFound, exception);
@@ -141,7 +141,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in not found results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the not found result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a not found error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Not found results must be initialized with a valid exception.</exception>
     public static Result<T> NotFound<T>(this Exception exception)
     {
@@ -154,7 +154,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the unauthorized result.</param>
     /// <returns>A <see cref="Result"/> representing an unauthorized error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Unauthorized results must be initialized with a valid exception.</exception>
     public static Result Unauthorized(this Exception exception)
     {
@@ -168,7 +168,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in unauthorized results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the unauthorized result.</param>
     /// <returns>A <see cref="Result{T}"/> representing an unauthorized error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Unauthorized results must be initialized with a valid exception.</exception>
     public static Result<T> Unauthorized<T>(this Exception exception)
     {
@@ -181,7 +181,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the forbidden result.</param>
     /// <returns>A <see cref="Result"/> representing a forbidden error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Forbidden results must be initialized with a valid exception.</exception>
     public static Result Forbidden(this Exception exception)
     {
@@ -195,7 +195,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in forbidden results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the forbidden result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a forbidden error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Forbidden results must be initialized with a valid exception.</exception>
     public static Result<T> Forbidden<T>(this Exception exception)
     {
@@ -208,7 +208,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the unavailable result.</param>
     /// <returns>A <see cref="Result"/> representing an unavailable error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Unavailable results must be initialized with a valid exception.</exception>
     public static Result Unavailable(this Exception exception)
     {
@@ -222,7 +222,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in unavailable results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the unavailable result.</param>
     /// <returns>A <see cref="Result{T}"/> representing an unavailable error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Unavailable results must be initialized with a valid exception.</exception>
     public static Result<T> Unavailable<T>(this Exception exception)
     {
@@ -235,7 +235,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the critical error result.</param>
     /// <returns>A <see cref="Result"/> representing a critical error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Critical error results must be initialized with a valid exception.</exception>
     public static Result CriticalError(this Exception exception)
     {
@@ -249,7 +249,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in critical error results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the critical error result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a critical error with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Critical error results must be initialized with a valid exception.</exception>
     public static Result<T> CriticalError<T>(this Exception exception)
     {
@@ -288,7 +288,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result.</typeparam>
     /// <param name="value">The value to be encapsulated in the successful result.</param>
     /// <returns>A <see cref="Result{T}"/> containing the specified value.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>. 
+    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>.
     /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
     public static Result<T> Success<T>(this T value)
     {
@@ -302,7 +302,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result.</typeparam>
     /// <param name="value">The value to be encapsulated in the successful result.</param>
     /// <returns>A <see cref="Result{T}"/> containing the specified value.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>. 
+    /// <exception cref="InvalidOperationException">Thrown when the specified value is an <see cref="Exception"/>.
     /// This method only accepts non-<see cref="Exception"/> types for success results.</exception>
     public static Result<T> Created<T>(this T value)
     {
@@ -315,7 +315,7 @@ public static class ResultExtensions
     /// </summary>
     /// <param name="exception">The exception to be encapsulated in the failure result.</param>
     /// <returns>A <see cref="Result"/> representing a failure with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Failure results must be initialized with a valid exception.</exception>
     public static Result Failure(this Exception exception)
     {
@@ -329,7 +329,7 @@ public static class ResultExtensions
     /// <typeparam name="T">The type of the value contained in the result. This is not used in failure results.</typeparam>
     /// <param name="exception">The exception to be encapsulated in the failure result.</param>
     /// <returns>A <see cref="Result{T}"/> representing a failure with the specified exception.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null. 
+    /// <exception cref="ArgumentNullException">Thrown when the specified exception is null.
     /// Failure results must be initialized with a valid exception.</exception>
     public static Result<T> Failure<T>(this Exception exception)
     {

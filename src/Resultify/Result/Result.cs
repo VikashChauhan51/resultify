@@ -1,4 +1,6 @@
-﻿namespace ResultifyCore;
+﻿using ResultifyCore.Adapters;
+
+namespace ResultifyCore;
 
 /// <summary>
 /// Represents the result of an operation that can succeed or fail.
@@ -182,6 +184,10 @@ public readonly struct Result : IEquatable<Result>
     /// <returns><c>true</c> if the two <see cref="Result"/> instances are not equal; otherwise, <c>false</c>.</returns>
     public static bool operator !=(Result left, Result right) => !left.Equals(right);
 
+    /// <summary>
+    /// Converts this Result into an IResult adapter.
+    /// </summary>
+    public IResult ToIResult() => new ResultAdapter(this);
     private bool IsSuccess()
     {
         return Status == ResultState.Success || Status == ResultState.NoContent || Status == ResultState.Created;

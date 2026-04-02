@@ -1,4 +1,6 @@
-﻿namespace ResultifyCore;
+﻿using ResultifyCore.Adapters;
+
+namespace ResultifyCore;
 
 /// <summary>
 /// Represents the result of an operation that can succeed or fail.
@@ -295,6 +297,11 @@ public readonly struct Result<T> : IEquatable<Result<T>>
     {
         return !(left == right);
     }
+
+    /// <summary>
+    /// Converts this Result into an IResult adapter.
+    /// </summary>
+    public IResult<T> ToIResult() => new ResultAdapter<T>(this);
 
     private bool IsSuccess()
     {

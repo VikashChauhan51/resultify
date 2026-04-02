@@ -1,10 +1,9 @@
-﻿namespace ResultifyCore;
-
+﻿namespace ResultifyCore.Errors;
 
 /// <summary>
-/// Represents the state or result of an operation.
+/// Error type enumeration representing various error conditions that can occur during an operation.
 /// </summary>
-public enum ResultState : byte
+public enum ErrorType
 {
     /// <summary>
     /// The operation completed successfully.

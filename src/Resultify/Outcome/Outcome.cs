@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using ResultifyCore.Adapters;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ResultifyCore;
 
@@ -306,6 +307,10 @@ public sealed class Outcome : IEquatable<Outcome>
     /// <returns><c>true</c> if the two <see cref="Outcome"/> instances are not equal; otherwise, <c>false</c>.</returns>
     public static bool operator !=(Outcome left, Outcome right) => !left.Equals(right);
 
+    /// <summary>
+    /// Converts this Outcome into an IResult adapter.
+    /// </summary>
+    public IResult ToIResult() => new OutcomeAdapter(this);
     private bool IsSuccess()
     {
         return Status == ResultState.Success || Status == ResultState.NoContent || Status == ResultState.Created;
