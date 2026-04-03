@@ -1,5 +1,8 @@
 ﻿namespace ResultifyCore;
 
+/// <summary>
+/// Results extensions providing additional functionality for working with results, such as mapping, binding, and creating specific result types based on exceptions.
+/// </summary>
 public static class ResultExtensions
 {
     /// <summary>

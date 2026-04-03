@@ -12,6 +12,7 @@ namespace ResultifyCore.AspNetCore;
 /// </summary>
 public static class ResultExtensions
 {
+
     // ========== IActionResult conversions (MVC / ControllerBase) ==========
 
     public static IActionResult ToActionResult<T>(this Outcome<T> outcome, ControllerBase controller, string? url = null)
