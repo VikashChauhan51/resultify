@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace ResultifyCore;
 
+/// <summary>
+/// The GuardClause class implements the IGuardClause interface and provides a fluent API for performing various guard checks on method arguments. It includes methods for validating conditions such as null checks, empty string checks, range checks, and more. Each method throws an appropriate exception if the validation fails, allowing developers to ensure that their method arguments meet specific criteria before proceeding with the execution of the method. This design promotes clean and readable code by allowing developers to express validation logic in a fluent and intuitive manner.
+/// </summary>
 public class GuardClause : IGuardClause
 {
     /// <inheritdoc />

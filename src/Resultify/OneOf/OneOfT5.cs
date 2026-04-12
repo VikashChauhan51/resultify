@@ -48,6 +48,10 @@ public readonly struct OneOf<T1, T2, T3, T4, T5> : IEquatable<OneOf<T1, T2, T3, 
         T5
     }
 
+    /// <summary>
+    /// The constructor takes a value of type T1 and initializes the OneOf struct to represent that value. It sets the internal state to indicate that the stored value is of type T1, while the other possible types are set to their default values. This allows the OneOf struct to encapsulate a value of type T1 while maintaining information about which type is currently stored.
+    /// </summary>
+    /// <param name="value">The value of type T1 to be stored in the OneOf struct.</param>
     public OneOf(T1 value)
     {
         _value1 = value;
@@ -58,6 +62,10 @@ public readonly struct OneOf<T1, T2, T3, T4, T5> : IEquatable<OneOf<T1, T2, T3, 
         _type = OneOfType.T1;
     }
 
+    /// <summary>
+    /// The constructor takes a value of type T2 and initializes the OneOf struct to represent that value. It sets the internal state to indicate that the stored value is of type T2, while the other possible types are set to their default values. This allows the OneOf struct to encapsulate a value of type T2 while maintaining information about which type is currently stored.
+    /// </summary>
+    /// <param name="value">The value of type T2 to be stored in the OneOf struct.</param>
     public OneOf(T2 value)
     {
         _value1 = default;
@@ -68,6 +76,10 @@ public readonly struct OneOf<T1, T2, T3, T4, T5> : IEquatable<OneOf<T1, T2, T3, 
         _type = OneOfType.T2;
     }
 
+    /// <summary>
+    /// The constructor takes a value of type T3 and initializes the OneOf struct to represent that value. It sets the internal state to indicate that the stored value is of type T3, while the other possible types are set to their default values. This allows the OneOf struct to encapsulate a value of type T3 while maintaining information about which type is currently stored.
+    /// </summary>
+    /// <param name="value">The value of type T3 to be stored in the OneOf struct.</param>
     public OneOf(T3 value)
     {
         _value1 = default;
