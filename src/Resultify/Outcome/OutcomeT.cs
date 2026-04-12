@@ -103,74 +103,170 @@ public class Outcome<T> : IEquatable<Outcome<T>>
 
         return new Outcome<T>(ResultState.Failure, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a conflict, indicating that the request could not be completed due to a conflict with the current state of the resource or data.
+    /// </summary>
+    /// <param name="errors">The errors associated with the conflict outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a conflict.</returns>
     public static Outcome<T> Conflict(params OutcomeError[] errors)
     {
 
         return new Outcome<T>(ResultState.Conflict, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a conflict, indicating that the request could not be completed due to a conflict with the current state of the resource or data.
+    /// </summary>
+    /// <param name="errors">The errors associated with the conflict outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a conflict.</returns>
     public static Outcome<T> Conflict(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome<T>(ResultState.Conflict, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a problem, indicating that an unexpected issue occurred during the processing of the request, which may require further investigation or resolution.
+    /// </summary>
+    /// <param name="errors">The errors associated with the problem outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a problem.</returns>
     public static Outcome<T> Problem(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.Problem, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a problem, indicating that an unexpected issue occurred during the processing of the request, which may require further investigation or resolution.
+    /// </summary>
+    /// <param name="errors">The errors associated with the problem outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a problem.</returns>
     public static Outcome<T> Problem(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome<T>(ResultState.Problem, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered validation errors, indicating that the input data or parameters provided in the request did not meet the required validation criteria, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the validation outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a validation failure.</returns>
     public static Outcome<T> Validation(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.Validation, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered validation errors, indicating that the input data or parameters provided in the request did not meet the required validation criteria, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the validation outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a validation failure.</returns>
     public static Outcome<T> Validation(IEnumerable<OutcomeError> errors)
     {
         return new Outcome<T>(ResultState.Validation, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a not found error, indicating that the requested resource or data could not be found or does not exist, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the not found outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a not found outcome.</returns>
     public static Outcome<T> NotFound(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.NotFound, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a not found error, indicating that the requested resource or data could not be found or does not exist, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the not found outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a not found outcome.</returns>
     public static Outcome<T> NotFound(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome<T>(ResultState.NotFound, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered an unauthorized error, indicating that the user or client is not authenticated or does not have the necessary credentials to access the requested resource or perform the requested action, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unauthorized outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing an unauthorized outcome.</returns>
     public static Outcome<T> Unauthorized(params OutcomeError[] errors)
     {
 
         return new Outcome<T>(ResultState.Unauthorized, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered an unauthorized error, indicating that the user or client is not authenticated or does not have the necessary credentials to access the requested resource or perform the requested action, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unauthorized outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing an unauthorized outcome.</returns>
     public static Outcome<T> Unauthorized(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome<T>(ResultState.Unauthorized, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered an unavailable error, indicating that the requested resource or service is currently unavailable or cannot be accessed, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unavailable outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing an unavailable outcome.</returns>
     public static Outcome<T> Unavailable(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.Unavailable, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered an unavailable error, indicating that the requested resource or service is currently unavailable or cannot be accessed, and the operation could not be completed as a result.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unavailable outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing an unavailable outcome.</returns>
     public static Outcome<T> Unavailable(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome<T>(ResultState.Unavailable, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a critical error, indicating a severe failure that may require immediate attention or intervention.
+    /// </summary>
+    /// <param name="errors">The errors associated with the critical error outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a critical error.</returns>
     public static Outcome<T> CriticalError(params OutcomeError[] errors)
     {
         return new Outcome<T>(ResultState.CriticalError, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that has encountered a critical error, indicating a severe failure that may require immediate attention or intervention.
+    /// </summary>
+    /// <param name="errors">The errors associated with the critical error outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a critical error.</returns>
     public static Outcome<T> CriticalError(IEnumerable<OutcomeError> errors)
     {
         return new Outcome<T>(ResultState.CriticalError, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that is forbidden, indicating that the user or client does not have the necessary permissions to perform the requested action.
+    /// </summary>
+    /// <param name="errors">The errors associated with the forbidden outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a forbidden outcome.</returns>
     public static Outcome<T> Forbidden(params OutcomeError[] errors)
     {
 
         return new Outcome<T>(ResultState.Forbidden, default!, errors);
     }
+
+    /// <summary>
+    /// The outcome of an operation that is forbidden, indicating that the user or client does not have the necessary permissions to perform the requested action.
+    /// </summary>
+    /// <param name="errors">The errors associated with the forbidden outcome.</param>
+    /// <returns>A <see cref="Outcome{T}"/> instance representing a forbidden outcome.</returns>
     public static Outcome<T> Forbidden(IEnumerable<OutcomeError> errors)
     {
         return new Outcome<T>(ResultState.Forbidden, default!, errors);

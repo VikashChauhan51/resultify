@@ -1,4 +1,8 @@
 ﻿namespace ResultifyCore;
+
+/// <summary>
+/// The <see cref="OutcomeExtensions"/> class provides extension methods for creating and working with <see cref="Outcome"/> and <see cref="Outcome{T}"/> instances. These methods offer a convenient way to create success and failure outcomes, allowing developers to easily construct outcomes based on their needs. The extension methods include functionality for creating failure outcomes with specified errors and success outcomes with a given value, streamlining the process of working with outcomes in a consistent and readable manner.
+/// </summary>
 public static class OutcomeExtensions
 {
 

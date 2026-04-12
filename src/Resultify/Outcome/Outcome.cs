@@ -135,52 +135,124 @@ public sealed class Outcome : IEquatable<Outcome>
     {
         return new Outcome(ResultState.Problem, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the operation failed due to validation errors, with the specified errors providing details about the validation issues that occurred during the operation.
+    /// </summary>
+    /// <param name="errors">The errors associated with the validation outcome.</param>
+    /// <returns>A validation <see cref="Outcome"/>.</returns>
     public static Outcome Validation(params OutcomeError[] errors)
     {
         return new Outcome(ResultState.Validation, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the operation failed due to validation errors, with the specified errors providing details about the validation issues that occurred during the operation.
+    /// </summary>
+    /// <param name="errors">The errors associated with the validation outcome.</param>
+    /// <returns>A validation <see cref="Outcome"/>.</returns>
     public static Outcome Validation(IEnumerable<OutcomeError> errors)
     {
         return new Outcome(ResultState.Validation, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the requested resource was not found, with the specified errors providing details about the reason for the not found status. 
+    /// </summary>
+    /// <param name="errors"></param>
+    /// <returns></returns>
     public static Outcome NotFound(params OutcomeError[] errors)
     {
         return new Outcome(ResultState.NotFound, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the requested resource was not found, with the specified errors providing details about the reason for the not found status.
+    /// </summary>
+    /// <param name="errors">The errors associated with the not found outcome.</param>
+    /// <returns>A not found <see cref="Outcome"/>.</returns>
     public static Outcome NotFound(IEnumerable<OutcomeError> errors)
     {
         return new Outcome(ResultState.NotFound, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the user or client is not authorized to perform the requested operation, with the specified errors providing details about the reason for the unauthorized status.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unauthorized outcome.</param>
+    /// <returns>An unauthorized <see cref="Outcome"/>.</returns>
     public static Outcome Unauthorized(params OutcomeError[] errors)
     {
         return new Outcome(ResultState.Unauthorized, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the user or client is not authorized to perform the requested operation, with the specified errors providing details about the reason for the unauthorized status.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unauthorized outcome.</param>
+    /// <returns>An unauthorized <see cref="Outcome"/>.</returns>
     public static Outcome Unauthorized(IEnumerable<OutcomeError> errors)
     {
         return new Outcome(ResultState.Unauthorized, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the service or resource is currently unavailable, with the specified errors providing details about the reason for the unavailability.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unavailable outcome.</param>
+    /// <returns></returns>
     public static Outcome Unavailable(params OutcomeError[] errors)
     {
         return new Outcome(ResultState.Unavailable, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the service or resource is currently unavailable, with the specified errors providing details about the reason for the unavailability.
+    /// </summary>
+    /// <param name="errors">The errors associated with the unavailable outcome.</param>
+    /// <returns>An unavailable <see cref="Outcome"/>.</returns>
     public static Outcome Unavailable(IEnumerable<OutcomeError> errors)
     {
 
         return new Outcome(ResultState.Unavailable, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that a critical error occurred during the operation, with the specified errors providing details about the nature of the critical error.
+    /// </summary>
+    /// <param name="errors">The errors associated with the critical error outcome.</param>
+    /// <returns>A critical error <see cref="Outcome"/>.</returns>
     public static Outcome CriticalError(params OutcomeError[] errors)
     {
         return new Outcome(ResultState.CriticalError, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that a critical error occurred during the operation, with the specified errors providing details about the nature of the critical error.
+    /// </summary>
+    /// <param name="errors">The errors associated with the critical error outcome.</param>
+    /// <returns>A critical error <see cref="Outcome"/>.</returns>
     public static Outcome CriticalError(IEnumerable<OutcomeError> errors)
     {
         return new Outcome(ResultState.CriticalError, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the operation was forbidden, with the specified errors providing details about the reason for the forbidden status.
+    /// </summary>
+    /// <param name="errors">The errors associated with the forbidden outcome.</param>
+    /// <returns>A forbidden <see cref="Outcome"/>.</returns>
     public static Outcome Forbidden(params OutcomeError[] errors)
     {
 
         return new Outcome(ResultState.Forbidden, errors);
     }
+
+    /// <summary>
+    /// The outcome indicates that the operation was forbidden, with the specified errors providing details about the reason for the forbidden status.
+    /// </summary>
+    /// <param name="errors">The errors associated with the forbidden outcome.</param>
+    /// <returns>A forbidden <see cref="Outcome"/>.</returns>
     public static Outcome Forbidden(IEnumerable<OutcomeError> errors)
     {
         return new Outcome(ResultState.Forbidden, errors);
